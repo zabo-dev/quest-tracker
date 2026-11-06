@@ -94,6 +94,22 @@ QuestShareDB = {
 ["title"] = "Lazy Peons",
 },
 {
+["id"] = 6062,
+["title"] = "Taming the Beast",
+},
+{
+["id"] = 6068,
+["title"] = "The Hunter's Path",
+},
+{
+["id"] = 6069,
+["title"] = "The Hunter's Path",
+},
+{
+["id"] = 6070,
+["title"] = "The Hunter's Path",
+},
+{
 ["id"] = 6394,
 ["title"] = "Thazz'ril's Pick",
 },
@@ -232,9 +248,23 @@ QuestShareDB = {
 ["id"] = 99582,
 },
 },
-["zone"] = "Orgrimmar",
-["t"] = 1793998590,
-["xp"] = 5801,
+["zone"] = "Durotar",
+["turnins"] = {
+{
+["id"] = 6068,
+["t"] = 1794000839,
+["title"] = "The Hunter's Path",
+["level"] = 10,
+},
+{
+["id"] = 6062,
+["t"] = 1794000926,
+["title"] = "Taming the Beast",
+["level"] = 10,
+},
+},
+["t"] = 1794001343,
+["xp"] = 1129,
 ["quests"] = {
 {
 ["title"] = "Break a Few Eggs",
@@ -297,6 +327,15 @@ QuestShareDB = {
 ["complete"] = false,
 },
 {
+["title"] = "A Simmering Storm",
+["zone"] = "Durotar",
+["id"] = 97281,
+["level"] = 11,
+["obj"] = {
+},
+["complete"] = true,
+},
+{
 ["title"] = "Securing the Lines",
 ["zone"] = "Durotar",
 ["id"] = 835,
@@ -304,11 +343,11 @@ QuestShareDB = {
 ["obj"] = {
 {
 ["done"] = false,
-["text"] = "0/12 Dustwind Savage slain",
+["text"] = "1/12 Dustwind Savage slain",
 },
 {
-["done"] = false,
-["text"] = "0/8 Dustwind Storm Witch slain",
+["done"] = true,
+["text"] = "8/8 Dustwind Storm Witch slain",
 },
 },
 ["complete"] = false,
@@ -382,13 +421,26 @@ QuestShareDB = {
 },
 ["complete"] = false,
 },
+{
+["title"] = "Taming the Beast",
+["zone"] = "Hunter",
+["id"] = 6083,
+["level"] = 10,
+["obj"] = {
+{
+["done"] = false,
+["text"] = "Tame a Surf Crawler",
 },
-["xpMax"] = 6500,
+},
+["complete"] = true,
+},
+},
+["xpMax"] = 7600,
 ["race"] = "Orc",
 ["name"] = "Tanzverbot",
 ["faction"] = "Horde",
-["questsDone"] = 58,
-["level"] = 9,
+["questsDone"] = 62,
+["level"] = 10,
 ["schema"] = 1,
 ["class"] = "HUNTER",
 }
