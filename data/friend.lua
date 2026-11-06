@@ -42,6 +42,10 @@ QuestShareDB = {
 ["title"] = "Report to Sen'jin Village",
 },
 {
+["id"] = 806,
+["title"] = "Dark Storms",
+},
+{
 ["id"] = 808,
 ["title"] = "Minshina's Skull",
 },
@@ -68,6 +72,10 @@ QuestShareDB = {
 {
 ["id"] = 837,
 ["title"] = "Encroachment",
+},
+{
+["id"] = 840,
+["title"] = "Conscript of the Horde",
 },
 {
 ["id"] = 2161,
@@ -108,6 +116,14 @@ QuestShareDB = {
 {
 ["id"] = 6070,
 ["title"] = "The Hunter's Path",
+},
+{
+["id"] = 6082,
+["title"] = "Taming the Beast",
+},
+{
+["id"] = 6083,
+["title"] = "Taming the Beast",
 },
 {
 ["id"] = 6394,
@@ -230,6 +246,14 @@ QuestShareDB = {
 ["title"] = "Wayward Weapons",
 },
 {
+["id"] = 97281,
+["title"] = "A Simmering Storm",
+},
+{
+["id"] = 97282,
+["title"] = "Stormy Potential",
+},
+{
 ["id"] = 97326,
 ["title"] = "Rocks to Rests",
 },
@@ -248,7 +272,7 @@ QuestShareDB = {
 ["id"] = 99582,
 },
 },
-["zone"] = "Durotar",
+["zone"] = "Orgrimmar",
 ["turnins"] = {
 {
 ["id"] = 6068,
@@ -262,9 +286,45 @@ QuestShareDB = {
 ["title"] = "Taming the Beast",
 ["level"] = 10,
 },
+{
+["id"] = 6083,
+["t"] = 1794001415,
+["title"] = "Taming the Beast",
+["level"] = 10,
 },
-["t"] = 1794001343,
-["xp"] = 1129,
+{
+["id"] = 97281,
+["t"] = 1794003140,
+["title"] = "A Simmering Storm",
+["level"] = 10,
+},
+{
+["id"] = 806,
+["t"] = 1794004132,
+["title"] = "Dark Storms",
+["level"] = 10,
+},
+{
+["id"] = 6082,
+["t"] = 1794004168,
+["title"] = "Taming the Beast",
+["level"] = 10,
+},
+{
+["id"] = 840,
+["t"] = 1794004462,
+["title"] = "Conscript of the Horde",
+["level"] = 10,
+},
+{
+["id"] = 97282,
+["t"] = 1794004765,
+["title"] = "Stormy Potential",
+["level"] = 10,
+},
+},
+["t"] = 1794005389,
+["xp"] = 7153,
 ["quests"] = {
 {
 ["title"] = "Break a Few Eggs",
@@ -327,13 +387,17 @@ QuestShareDB = {
 ["complete"] = false,
 },
 {
-["title"] = "A Simmering Storm",
+["title"] = "Lost But Not Forgotten",
 ["zone"] = "Durotar",
-["id"] = 97281,
+["id"] = 816,
 ["level"] = 11,
 ["obj"] = {
+{
+["done"] = false,
+["text"] = "0/1 Kron's Amulet",
 },
-["complete"] = true,
+},
+["complete"] = false,
 },
 {
 ["title"] = "Securing the Lines",
@@ -343,7 +407,7 @@ QuestShareDB = {
 ["obj"] = {
 {
 ["done"] = false,
-["text"] = "1/12 Dustwind Savage slain",
+["text"] = "5/12 Dustwind Savage slain",
 },
 {
 ["done"] = true,
@@ -366,17 +430,26 @@ QuestShareDB = {
 ["complete"] = false,
 },
 {
-["title"] = "Dark Storms",
+["title"] = "Crossroads Conscription",
 ["zone"] = "Durotar",
-["id"] = 806,
+["id"] = 842,
 ["level"] = 12,
 ["obj"] = {
 {
-["done"] = false,
-["text"] = "0/1 Fizzle's Claw",
+["done"] = true,
+["text"] = "Follow the western road from Kargal's Far Watch Outpost.\n\nAt the T intersection, turn left and follow the road south. \n\nFind Sergra Darkthorn at the crossing of roads within the Crossroads.",
 },
 },
-["complete"] = false,
+["complete"] = true,
+},
+{
+["title"] = "Margoz",
+["zone"] = "Durotar",
+["id"] = 828,
+["level"] = 12,
+["obj"] = {
+},
+["complete"] = true,
 },
 {
 ["title"] = "Hidden Enemies",
@@ -422,15 +495,11 @@ QuestShareDB = {
 ["complete"] = false,
 },
 {
-["title"] = "Taming the Beast",
+["title"] = "Training the Beast",
 ["zone"] = "Hunter",
-["id"] = 6083,
+["id"] = 6081,
 ["level"] = 10,
 ["obj"] = {
-{
-["done"] = false,
-["text"] = "Tame a Surf Crawler",
-},
 },
 ["complete"] = true,
 },
@@ -439,7 +508,7 @@ QuestShareDB = {
 ["race"] = "Orc",
 ["name"] = "Tanzverbot",
 ["faction"] = "Horde",
-["questsDone"] = 62,
+["questsDone"] = 68,
 ["level"] = 10,
 ["schema"] = 1,
 ["class"] = "HUNTER",
