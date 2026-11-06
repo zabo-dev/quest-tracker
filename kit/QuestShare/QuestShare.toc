@@ -1,0 +1,9 @@
+## Interface: 16001, 11508, 11507
+## Title: Quest Share
+## Notes: Copies only your level, zone, quest log and completed quests into its own file, for comparing quest progress with a friend.
+## Author: Warlock's Path
+## Version: 1.0.0
+## Dependencies: WarlockPath
+## SavedVariables: QuestShareDB
+
+QuestShare.lua

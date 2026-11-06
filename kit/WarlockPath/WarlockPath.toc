@@ -1,0 +1,9 @@
+## Interface: 16001, 11508, 11507
+## Title: Warlock's Path
+## Notes: Saves character, bags, bank, professions, Auctionator prices, AH sales/purchases and crafts for the Warlock's Path website. Syncs on /reload or logout.
+## Author: Warlock's Path
+## Version: 1.6.0
+## SavedVariables: WarlockPathDB
+## OptionalDeps: Auctionator
+
+WarlockPath.lua

@@ -1,0 +1,24 @@
+QUEST-SYNC FÜR WOW FOREVER
+==========================
+Damit vergleicht die Quest-Tracker-Seite deinen Stand mit meinem: wie viele Quests dir bis zu mir fehlen
+und welche wir zusammen machen können.
+
+1. Addon installieren
+   Die Ordner "WarlockPath" und "QuestShare" kopieren nach:
+   C:\Program Files (x86)\World of Warcraft\_forever_\Interface\AddOns\
+   (bei anderem Installationsort: dein WoW-Ordner\_forever_\Interface\AddOns\)
+   Im Spiel bei der Charakterauswahl unter "AddOns" beide anhaken. Funktioniert mit jeder Klasse.
+
+2. Quest-Sync starten
+   Doppelklick auf "Quest-Sync starten.bat".
+   Beim ersten Start fragt es nach dem Token, den du von mir bekommst. Einfügen, OK.
+   Optional: "Automatisch mit Windows starten.bat", dann musst du es nie wieder starten.
+
+3. Im Spiel
+   /wp sync  eingeben (lädt das Interface kurz neu). Ein paar Sekunden später ist dein Stand hochgeladen,
+   nach etwa 1-2 Minuten steht der Abgleich auf der Seite:
+   https://zabo-dev.github.io/quest-tracker/
+
+Was wird hochgeladen? Nur die kleine Datei von "QuestShare": Charaktername, Level, Zone, Questlog und
+erledigte Quests. Kein Gold, keine Taschen, keine Ausrüstung, nichts anderes von deinem PC.
+Probleme? In "questsync.log" im selben Ordner steht, was passiert ist.
