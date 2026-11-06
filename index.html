@@ -83,6 +83,7 @@
     .step.me { background: color-mix(in srgb, var(--accent) 9%, var(--card)); }
     .step .now-tag { background: var(--accent); color: #fff; font-weight: 600; font-size: 11px; padding: 2px 8px; border-radius: 999px; }
     .empty { padding: 16px; color: var(--label2); font-size: 15px; }
+    details.more { margin-top: 14px; } details.more summary { cursor: pointer; color: var(--accent); font-size: 15px; margin: 0 4px 8px; }
     footer { text-align: center; font-size: 13px; color: var(--label3); }
     @media (max-width: 520px) { h1 { font-size: 28px; } .tiles { gap: 8px; } .tile b { font-size: 22px; } .now p { font-size: 17px; } }
     @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
@@ -107,6 +108,7 @@
         <div class="tile"><small>Erledigt</small><b>64</b><small>Quests</small></div>
         <div class="tile"><small>Offen</small><b>6</b><small>im Questlog</small></div>
       </div>
+      <section><h2>Abgleich</h2><div class="group"><div class="empty">Sobald du das Addon und das Sync-Skript eingerichtet hast und im Spiel <span class="mono">/wp sync</span> eingibst, steht hier, wie viele Quests dir bis zu mir fehlen und welche wir zusammen machen können.</div></div></section>
       <section class="now">
         <div class="top"><span class="pill">Aktuell</span><span class="chip">Durotar</span><span class="chip">ab Level 11</span><span class="chip mono">52.2, 43.1</span></div>
         <p>Razor Hill: train. Turn in Encroachment, Dark Storms (accept <q>Margoz</q>), Threat from Below (accept part 2).</p>
