@@ -6,198 +6,100 @@
 <meta name="robots" content="noindex">
 <title>Quest-Stand</title>
     <style>
-    /* apple.com-style product page: white and #f5f5f7 bands, big tight headlines, one blue for links and checks. Light only by choice. */
+    /* One screen: a verdict line, four numbers, then both quest books side by side as one table. apple.com type and blue, light only. */
     :root {
       color-scheme: light;
-      --bg: #ffffff; --alt: #f5f5f7; --ink: #1d1d1f; --ink2: #6e6e73; --ink3: #86868b; --line: #d2d2d7;
+      --bg: #f5f5f7; --card: #ffffff; --ink: #1d1d1f; --ink2: #6e6e73; --ink3: #86868b; --line: #e8e8ed;
       --blue: #0071e3; --link: #0066cc; --green: #1d9b3a; --orange: #c46a00; --red: #d70015; --amber: #a87a00; --gray: #86868b;
       --f: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
       --fd: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI Variable Display", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
       --fm: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
     }
     * { box-sizing: border-box; }
-    body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.47 var(--f); letter-spacing: -.022em; -webkit-font-smoothing: antialiased; }
-    a { color: var(--link); text-decoration: none; } a:hover { text-decoration: underline; }
-    a:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 4px; }
-    .mono { font-family: var(--fm); font-variant-numeric: tabular-nums; letter-spacing: 0; }
-    .in { max-width: 980px; margin: 0 auto; padding-left: max(22px, env(safe-area-inset-left, 0px)); padding-right: max(22px, env(safe-area-inset-right, 0px)); }
-    .nav { position: sticky; top: 0; z-index: 9; background: rgba(251,251,253,.8); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid rgba(0,0,0,.08); }
-    .nav .in { height: 48px; display: flex; align-items: center; justify-content: space-between; font-size: 12px; letter-spacing: -.01em; }
-    .nav b { font-size: 21px; font-weight: 600; letter-spacing: .011em; } .nav span { color: var(--ink2); }
-    .band { padding-block: 72px; } .band.alt { background: var(--alt); }
-    .hero { text-align: center; padding-block: 80px 64px; }
-    .eyebrow { font-size: 21px; font-weight: 600; color: var(--ink2); letter-spacing: .011em; }
-    .hero h1 { font: 700 clamp(48px, 9vw, 80px)/1.05 var(--fd); letter-spacing: -.015em; margin: 6px 0 10px; }
-    .hero .sub { font-size: clamp(19px, 2.6vw, 24px); color: var(--ink2); letter-spacing: .009em; }
-    .xp { max-width: 420px; margin: 28px auto 8px; height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
-    .xp i { display: block; height: 100%; background: var(--ink); border-radius: 2px; }
-    .xpl { font-size: 14px; color: var(--ink3); }
-    h2 { font: 700 clamp(32px, 5vw, 48px)/1.08 var(--fd); letter-spacing: -.01em; margin: 0 0 8px; }
-    .lead { font-size: 21px; color: var(--ink2); margin: 0 0 32px; max-width: 640px; letter-spacing: .011em; }
-    .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; text-align: center; }
-    .stat b { display: block; font: 600 clamp(40px, 7vw, 64px)/1 var(--fd); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
-    .stat span { display: block; margin-top: 8px; font-size: 17px; color: var(--ink2); }
-    .now { background: var(--bg); border-radius: 28px; padding: clamp(28px, 5vw, 48px); }
-    .band:not(.alt) .now { background: var(--alt); }
-    .now .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
-    .chip { font-size: 14px; color: var(--ink2); border: 1px solid var(--line); padding: 4px 12px; border-radius: 980px; }
-    .chip.on { background: var(--ink); border-color: var(--ink); color: #fff; }
-    .now p { margin: 0; font: 600 clamp(22px, 3.2vw, 32px)/1.25 var(--fd); letter-spacing: -.005em; }
-    .now .foot { margin-top: 18px; font-size: 14px; color: var(--ink3); }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.4 var(--f); letter-spacing: -.01em; -webkit-font-smoothing: antialiased; }
+    a { color: var(--ink); text-decoration: none; } a:hover { color: var(--link); text-decoration: underline; }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 6px; }
+    .mono { font-family: var(--fm); font-size: .92em; letter-spacing: 0; }
+    .wrap { max-width: 980px; margin: 0 auto; padding-block: 32px; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); display: grid; gap: 18px; }
+    .eyebrow { font-size: 13px; font-weight: 600; color: var(--ink2); }
+    h1 { font: 700 clamp(28px, 4.4vw, 40px)/1.1 var(--fd); letter-spacing: -.02em; margin: 4px 0 6px; }
+    .sub { font-size: 17px; color: var(--ink2); max-width: 760px; } .sub b { color: var(--ink); }
+    .warn { color: var(--red); }
+    .nums { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+    .num { background: var(--card); border-radius: 16px; padding: 14px 16px; }
+    .num b { display: block; font: 600 30px/1.1 var(--fd); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+    .num small { font-size: 13px; color: var(--ink2); }
+    .card { background: var(--card); border-radius: 18px; padding: 18px 20px; min-width: 0; }
+    .now { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 14px; align-items: baseline; }
+    .now .k { font-size: 13px; font-weight: 600; color: var(--blue); white-space: nowrap; }
+    .now p { margin: 0; } .now small { grid-column: 2; color: var(--ink3); font-size: 13px; }
     q { quotes: none; font-weight: 600; } q::before, q::after { content: none; }
-    .now q { color: var(--ink); }
-    .vs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; text-align: center; margin-bottom: 40px; }
-    .tile small { display: block; font-size: 17px; color: var(--ink2); }
-    .tile b { display: block; font: 600 clamp(40px, 7vw, 64px)/1.1 var(--fd); letter-spacing: -.02em; }
-    .gh { font-size: 21px; font-weight: 600; letter-spacing: .011em; margin: 40px 0 6px; }
-    .gh:first-child { margin-top: 0; }
-    .group { border-top: 1px solid var(--line); }
-    .row { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 14px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--line); }
-    .row .t { font-weight: 500; } .row .r { font-size: 14px; color: var(--ink3); white-space: nowrap; }
-    .lv { font: 600 15px var(--f); font-variant-numeric: tabular-nums; }
+    .bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+    .bar h2 { font: 600 19px var(--fd); margin: 0; letter-spacing: -.01em; }
+    .seg { display: inline-flex; background: #e8e8ed; border-radius: 9px; padding: 2px; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+    .seg button { border: 0; background: none; font: 500 13px var(--f); color: var(--ink); padding: 5px 12px; border-radius: 7px; cursor: pointer; white-space: nowrap; }
+    .seg button[aria-pressed="true"] { background: var(--card); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+    .tw { max-height: min(62vh, 640px); overflow: auto; border-top: 1px solid var(--line); }
+    table { width: 100%; border-collapse: collapse; }
+    thead th { position: sticky; top: 0; background: var(--card); z-index: 1; font-size: 12px; font-weight: 600; color: var(--ink2); text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); }
+    thead th.c { text-align: center; width: 30%; }
+    td { padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    td.q .qi { display: flex; gap: 10px; align-items: baseline; }
+    td.c { text-align: center; font-size: 13px; } td.c small { display: block; color: var(--ink3); font-size: 12px; }
+    tr.band th { text-align: left; font-size: 12px; font-weight: 600; color: var(--ink3); padding: 14px 6px 4px; border-bottom: 1px solid var(--line); text-transform: uppercase; letter-spacing: .04em; }
+    .lv { font: 600 13px var(--f); font-variant-numeric: tabular-nums; min-width: 20px; }
     .lv.red { color: var(--red); } .lv.org { color: var(--orange); } .lv.yel { color: var(--amber); } .lv.grn { color: var(--green); } .lv.gry { color: var(--gray); }
-    .obj { list-style: none; margin: 4px 0 0; padding: 0; font-size: 15px; color: var(--ink2); }
-    .obj li.ok { color: var(--green); } .obj li.ok::before { content: "✓ "; }
-    .ready { font-size: 14px; font-weight: 600; color: var(--green); margin-left: 8px; }
-    .hint { font-size: 14px; color: var(--ink3); margin: 14px 0 0; }
-    .empty { padding: 18px 0; color: var(--ink2); border-bottom: 1px solid var(--line); }
-    .progress { display: flex; align-items: center; gap: 16px; margin: -8px 0 28px; }
-    .progress .track { flex: 1; height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
-    .progress i { display: block; height: 100%; width: 0; background: var(--blue); transition: width .5s cubic-bezier(.25,.1,.25,1); }
-    .progress span { font-size: 15px; color: var(--ink2); white-space: nowrap; font-variant-numeric: tabular-nums; }
-    .steps { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
-    .step { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 14px; padding: 18px 0; border-bottom: 1px solid var(--line); }
-    .check { appearance: none; -webkit-appearance: none; width: 24px; height: 24px; margin: 2px 0 0; border-radius: 50%; border: 1.5px solid var(--ink3); cursor: pointer; display: grid; place-items: center; transition: background .2s, border-color .2s; }
-    .check:checked { background: var(--blue); border-color: var(--blue); }
-    .check:checked::after { content: ""; width: 6px; height: 11px; border: solid #fff; border-width: 0 2px 2px 0; transform: translateY(-1px) rotate(45deg); }
-    .step .meta { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; font-size: 14px; color: var(--ink3); }
-    .step p { margin: 4px 0 0; }
-    .step.past p { color: var(--ink2); }
-    .step.mine-done p { color: var(--ink3); text-decoration: line-through; text-decoration-color: var(--line); }
-    .step.me { background: linear-gradient(90deg, rgba(0,113,227,.06), transparent 70%); }
-    .now-tag { font-size: 12px; font-weight: 600; color: #fff; background: var(--blue); padding: 2px 9px; border-radius: 980px; }
-    details.more { margin-top: 28px; }
-    details.more summary { cursor: pointer; color: var(--link); font-size: 17px; list-style: none; }
-    details.more summary::after { content: " ›"; } details.more[open] summary { margin-bottom: 12px; }
-    footer { background: var(--alt); color: var(--ink3); font-size: 12px; padding-block: 22px; border-top: 1px solid var(--line); }
-    @media (max-width: 640px) { .band { padding-block: 52px; } .hero { padding-block: 56px 44px; } .stats, .vs { gap: 10px; } .stat span, .tile small { font-size: 14px; } }
-    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+    .st { font-weight: 700; font-size: 15px; } .st.done { color: var(--green); } .st.open { color: var(--blue); } .st.none { color: var(--ink3); font-weight: 400; }
+    .legend { font-size: 12px; color: var(--ink3); margin-top: 10px; display: flex; gap: 14px; flex-wrap: wrap; }
+    .empty { padding: 18px 6px; color: var(--ink2); }
+    @media (max-width: 640px) { .nums { grid-template-columns: repeat(2, minmax(0, 1fr)); } thead th.c { width: 22%; } }
     </style>
-    <nav class="nav"><div class="in"><b>Quest-Stand</b><span>Aktualisiert <span class="ts" data-t="1793994344"></span></span></div></nav>
-    <header class="hero in">
-      <div class="eyebrow">WoW Forever · Orc Hexenmeister</div>
-      <h1>Level 11.</h1>
-      <div class="sub">Horde · gerade in Durotar</div>
-      <div class="xp" role="img" aria-label="83 Prozent bis Level 12"><i style="width:83.2%"></i></div>
-      <div class="xpl">83 % bis Level 12</div>
-    </header>
-    <section class="band alt"><div class="in">
-      <div class="stats">
-        <div class="stat"><b>34</b><span>von 77 Schritten</span></div>
-        <div class="stat"><b>64</b><span>Quests erledigt</span></div>
-        <div class="stat"><b>6</b><span>im Questlog</span></div>
+    </head>
+<body>
+<div class="wrap">
+      <header>
+        <div class="eyebrow">Quest-Stand · WoW Forever · Stand <span class="ts" data-t="1793994344"></span> · Noch kein Sync von dir</div>
+        <h1>Level 11, 0 Quests erledigt.</h1>
+        <div class="sub">Sobald du das Repo eingerichtet hast und <span class="mono">/wp sync</span> machst, siehst du hier unsere Questbücher nebeneinander.</div>
+      </header>
+      <div class="nums">
+        <div class="num"><b>–</b><small>dir fehlen bis zu mir</small></div>
+        <div class="num"><b>–</b><small>zusammen machbar</small></div>
+        <div class="num"><b>–</b><small>haben wir beide offen</small></div>
+        <div class="num"><b>–</b><small>mir fehlen von dir</small></div>
       </div>
-    </div></section>
-    <section class="band"><div class="in">
-      <h2>Gerade dran.</h2>
-      <p class="lead">Wo ich in der Route stehe, auch wenn ich offline bin.</p>
-      <div class="now">
-        <div class="tags"><span class="chip on">Schritt 34</span><span class="chip">Durotar</span><span class="chip">ab Level 11</span><span class="chip mono">52.2, 43.1</span></div>
-        <p>Razor Hill: train. Turn in Encroachment, Dark Storms (accept <q>Margoz</q>), Threat from Below (accept part 2).</p>
-        <div class="foot">Stand <span class="ts" data-t="1793994344" data-f="long"></span></div>
+      <div class="card now"><span class="k">Ich gerade</span><p>Razor Hill: train. Turn in Encroachment, Dark Storms (accept <q>Margoz</q>), Threat from Below (accept part 2).</p><small>Level 11 · 83 % · Durotar · Schritt 34 von 77</small></div>
+      <div class="card">
+        <div class="bar"><h2>Questbuch-Vergleich</h2>
+          <div class="seg" role="group" aria-label="Filter">
+            <button type="button" data-f="all" aria-pressed="true">Alle</button>
+            <button type="button" data-f="tog" aria-pressed="false">Zusammen machbar</button>
+            <button type="button" data-f="me" aria-pressed="false">Nur ich</button>
+            <button type="button" data-f="him" aria-pressed="false">Nur du</button>
+            <button type="button" data-f="both" aria-pressed="false">Beide</button>
+          </div></div>
+        <div class="tw"><table><thead><tr><th>Quest</th><th class="c">Ich</th><th class="c">Du</th></tr></thead>
+          <tbody><tr class="band" data-band="1"><th colspan="3">Level 16–20</th></tr><tr data-k="me" data-tog="1"><td class="q"><span class="qi"><span class="lv red">16</span><a href="https://www.wowhead.com/classic/quest=5728" target="_blank" rel="noopener">Hidden Enemies</a></span></td><td class="c"><span class="st open" title="im Questlog">●</span><small>0/1 Bazzalan slain</small></td><td class="c"><span class="st none" title="fehlt">–</span></td></tr><tr class="band" data-band="1"><th colspan="3">Level 11–15</th></tr><tr data-k="me" data-tog="1"><td class="q"><span class="qi"><span class="lv yel">12</span><a href="https://www.wowhead.com/classic/quest=840" target="_blank" rel="noopener">Conscript of the Horde</a></span></td><td class="c"><span class="st open" title="im Questlog">●</span><small>fertig</small></td><td class="c"><span class="st none" title="fehlt">–</span></td></tr><tr data-k="me" data-tog="1"><td class="q"><span class="qi"><span class="lv yel">12</span><a href="https://www.wowhead.com/classic/quest=828" target="_blank" rel="noopener">Margoz</a></span></td><td class="c"><span class="st open" title="im Questlog">●</span><small>fertig</small></td><td class="c"><span class="st none" title="fehlt">–</span></td></tr><tr data-k="me" data-tog="1"><td class="q"><span class="qi"><span class="lv yel">11</span><a href="https://www.wowhead.com/classic/quest=99052" target="_blank" rel="noopener">Threat from Below</a></span></td><td class="c"><span class="st open" title="im Questlog">●</span><small>0/1 Aggor&#x27;s Belt</small></td><td class="c"><span class="st none" title="fehlt">–</span></td></tr><tr class="band" data-band="1"><th colspan="3">Level 6–10</th></tr><tr data-k="me" data-tog="1"><td class="q"><span class="qi"><span class="lv grn">6</span><a href="https://www.wowhead.com/classic/quest=97905" target="_blank" rel="noopener">Camping 101: Herbalism</a></span></td><td class="c"><span class="st open" title="im Questlog">●</span><small>Raise your herbalism skill to 20</small></td><td class="c"><span class="st none" title="fehlt">–</span></td></tr><tr data-k="me" data-tog="1"><td class="q"><span class="qi"><span class="lv grn">6</span><a href="https://www.wowhead.com/classic/quest=97907" target="_blank" rel="noopener">Camping 101: Mining</a></span></td><td class="c"><span class="st open" title="im Questlog">●</span><small>Raise your mining skill to 20</small></td><td class="c"><span class="st none" title="fehlt">–</span></td></tr></tbody></table></div>
+        <div class="legend"><span><span class="st done">✓</span> abgegeben</span><span><span class="st open">●</span> im Questlog, mit Fortschritt</span><span><span class="st none">–</span> fehlt</span><span>Zahl vorne = Quest-Level</span></div>
       </div>
-    </div></section>
-    <section class="band alt"><div class="in"><h2>Du und ich.</h2><p class="lead">Sobald du Addon und Sync-Skript eingerichtet hast und im Spiel <span class="mono">/wp sync</span> eingibst, steht hier, wie viele Quests dir bis zu mir fehlen und welche wir zusammen machen können.</p></div></section>
-    <section class="band"><div class="in">
-      <h2>Dein Weg zu mir.</h2>
-      <p class="lead">Die Route Schritt für Schritt. Hak ab, was du erledigt hast, dein Browser merkt es sich. Koordinaten passen zu TomTom: <span class="mono">/way x y</span></p>
-      <div class="progress"><div class="track"><i id="progbar"></i></div><span id="prog"></span></div>
-      <ol class="steps"><li class="step past" data-i="0"><input class="check" type="checkbox" id="s0" data-i="0" aria-label="Schritt 1 erledigt">
-          <div><div class="meta"><span>1 · Valley of Trials · L1</span><span class="mono">43.3, 68.5</span></div><p>Accept <q>Your Place in the World</q> from Kaltunk, turn it in to Gornek inside the Den (42.1, 68.3). Accept <q>Cutting Teeth</q> and <q>Wayward Weapons</q>. Accept <q>Vile Familiars</q> from Ruzan (42.6, 69.0).</p></div></li><li class="step past" data-i="1"><input class="check" type="checkbox" id="s1" data-i="1" aria-label="Schritt 2 erledigt">
-          <div><div class="meta"><span>2 · Valley of Trials · L1</span><span class="mono">42.7, 71.6</span></div><p>Kill 10 Mottled Boars and pick up 6 Abandoned Training Weapons on the ground.</p></div></li><li class="step past" data-i="2"><input class="check" type="checkbox" id="s2" data-i="2" aria-label="Schritt 3 erledigt">
-          <div><div class="meta"><span>3 · Valley of Trials · L2</span><span class="mono">42.9, 69.2</span></div><p>Den: accept <q>Tainted Parchment</q> and <q>Tainted Tablet</q> (if offered) from Gornek. Train at Nartok (40.6, 68.5). Turn in Cutting Teeth, accept <q>Sting of the Scorpid</q>. Turn in Tainted Parchment at Nartok, Wayward Weapons at Kzan (40.5, 68.0). Accept <q>Galgar's Cactus Apple Surprise</q> from Galgar (42.7, 67.2).</p></div></li><li class="step past" data-i="3"><input class="check" type="checkbox" id="s3" data-i="3" aria-label="Schritt 4 erledigt">
-          <div><div class="meta"><span>4 · Valley of Trials · L2</span><span class="mono">40.6, 62.6</span></div><p>Kill Scorpid Workers on the way (10 tails). Accept <q>Sarkoth</q> from Hana'zua.</p></div></li><li class="step past" data-i="4"><input class="check" type="checkbox" id="s4" data-i="4" aria-label="Schritt 5 erledigt">
-          <div><div class="meta"><span>5 · Valley of Trials · L3</span><span class="mono">40.2, 62.1</span></div><p>Pick 10 Cactus Apples. Kill 6 Vile Familiars (Warlock version). Kill Sarkoth (level 4, pull alone with the Imp tanking), turn in at Hana'zua, accept the follow-up. Turn in the apples at Galgar and pick <b>Wild Harvest</b> (teaches Herbalism; you learn Mining in Razor Hill).</p></div></li><li class="step past" data-i="5"><input class="check" type="checkbox" id="s5" data-i="5" aria-label="Schritt 6 erledigt">
-          <div><div class="meta"><span>6 · Valley of Trials · L4</span><span class="mono">40.6, 68.5</span></div><p>Train at Nartok (level 4: 3 new spells).</p></div></li><li class="step past" data-i="6"><input class="check" type="checkbox" id="s6" data-i="6" aria-label="Schritt 7 erledigt">
-          <div><div class="meta"><span>7 · Valley of Trials · L4</span><span class="mono">42.1, 68.3</span></div><p>Den: turn in Sting of the Scorpid and Sarkoth at Gornek. Turn in Vile Familiars at Ruzan, accept the next one, turn it in at Zureetha (42.9, 69.2): you get <b>Summon Imp</b>. Accept <q>Burning Blade Medallion</q>. Vendor greys at Hraug.</p></div></li><li class="step past" data-i="7"><input class="check" type="checkbox" id="s7" data-i="7" aria-label="Schritt 8 erledigt">
-          <div><div class="meta"><span>8 · Valley of Trials · L4</span><span class="mono">45.0, 69.1</span></div><p>Wake 5 Lazy Peons with the blackjack (<q>Lazy Peons</q>), turn in at Foreman Thazz'ril (44.6, 68.7), accept <q>Thazz'ril's Pick</q>.</p></div></li><li class="step past" data-i="8"><input class="check" type="checkbox" id="s8" data-i="8" aria-label="Schritt 9 erledigt">
-          <div><div class="meta"><span>9 · Valley of Trials · L5</span><span class="mono">43.7, 53.8</span></div><p>Burning Blade Coven cave (entrance 45, 56): take Thazz'ril's Pick at the waterfall (straight, then right, follow the stream). Kill Yarrog Baneshadow on the ledge above the pool (42.7, 53.0) for the Medallion.</p></div></li><li class="step past" data-i="9"><input class="check" type="checkbox" id="s9" data-i="9" aria-label="Schritt 10 erledigt">
-          <div><div class="meta"><span>10 · Valley of Trials · L5</span><span class="mono">42.4, 68.6</span></div><p>Den: turn in the Medallion at Zureetha, accept <q>Report to Sen'jin Village</q>. Read the Lost Journal next to her: <q>The Adventurer</q> (new in Forever). Train, buy Grimoire of Blood Pact at Hraug. Turn in Thazz'ril's Pick.</p></div></li><li class="step past" data-i="10"><input class="check" type="checkbox" id="s10" data-i="10" aria-label="Schritt 11 erledigt">
-          <div><div class="meta"><span>11 · Durotar · L5</span><span class="mono">52.1, 68.3</span></div><p>Leave the valley. Accept <q>A Peon's Burden</q> from Ukor on the road.</p></div></li><li class="step past" data-i="11"><input class="check" type="checkbox" id="s11" data-i="11" aria-label="Schritt 12 erledigt">
-          <div><div class="meta"><span>12 · Durotar · L5</span><span class="mono">56.0, 74.5</span></div><p>Sen'jin Village: accept <q>Practical Prey</q> and <q>Legging It</q> (Vel'rin Fang), <q>A Solvent Spirit</q> and <q>Forgotten Loa Idols</q> (Master Vornal), turn in Report to Sen'jin at Master Gadrin, accept <q>Minshina's Skull</q>, <q>Zalazane</q>, <q>Report to Orgnil</q>, and <q>Bloodtalon Matriarch</q> from Xar'Ti. <q>A Pain in the Neck</q> (Pa'zula) is optional.</p></div></li><li class="step past" data-i="12"><input class="check" type="checkbox" id="s12" data-i="12" aria-label="Schritt 13 erledigt">
-          <div><div class="meta"><span>13 · Durotar · L6</span><span class="mono">52.4, 67.2</span></div><p>On the way north: kill 6 Ridgeshade Creepers and 6 Lurkers (Legging It).</p></div></li><li class="step past" data-i="13"><input class="check" type="checkbox" id="s13" data-i="13" aria-label="Schritt 14 erledigt">
-          <div><div class="meta"><span>14 · Durotar · L6</span><span class="mono">52.0, 47.3</span></div><p>Brakk's campfire: turn in The Adventurer, accept <q>The Great Outdoors</q>. Type <span class=mono>/sit</span> until Boosted Rest appears (about a minute), turn in, accept <q>Camping 101: Cooking</q>.</p></div></li><li class="step past" data-i="14"><input class="check" type="checkbox" id="s14" data-i="14" aria-label="Schritt 15 erledigt">
-          <div><div class="meta"><span>15 · Durotar · L6</span><span class="mono">52.0, 43.5</span></div><p>Razor Hill: accept <q>For Honor</q> (Turroc), turn in Report to Orgnil, accept <q>Vanquish the Betrayers</q> at Gar'Thok, turn in Legging It, accept <q>Break a Few Eggs</q> (Cook Torka 51.1, 42.5).</p></div></li><li class="step past" data-i="15"><input class="check" type="checkbox" id="s15" data-i="15" aria-label="Schritt 16 erledigt">
-          <div><div class="meta"><span>16 · Durotar · L7</span><span class="mono">51.8, 40.8</span></div><p><b>Learn Mining at Krunn</b> and take <q>Camping 101: Mining</q>. Buy a Mining Pick at the general goods vendor. Herbalism you already have from Galgar's Wild Harvest. From now on, pick every node you pass.</p></div></li><li class="step past" data-i="16"><input class="check" type="checkbox" id="s16" data-i="16" aria-label="Schritt 17 erledigt">
-          <div><div class="meta"><span>17 · Durotar · L7</span><span class="mono">51.5, 41.6</span></div><p>Learn Cooking at Cook Torka and finish Camping 101: Cooking. Accept <q>This Fruit Could Bite Back</q>. Turn in A Peon's Burden at Innkeeper Grosk and <b>set your hearth to Razor Hill</b>. Accept <q>Carry Your Weight</q> (Furl Scornbrow, top of the watchtower 49.9, 40.4).</p></div></li><li class="step past" data-i="17"><input class="check" type="checkbox" id="s17" data-i="17" aria-label="Schritt 18 erledigt">
-          <div><div class="meta"><span>18 · Durotar · L7</span><span class="mono">49.5, 47.7</span></div><p>Quilboar huts west of town: 8 Prickly Pear Fruit. Turn in at Cook Torka.</p></div></li><li class="step past" data-i="18"><input class="check" type="checkbox" id="s18" data-i="18" aria-label="Schritt 19 erledigt">
-          <div><div class="meta"><span>19 · Durotar · L8</span><span class="mono">56.6, 53.0</span></div><p>Tiragarde Keep: kill 10 Sailors and 8 Marines, take the Raider's Shield, Bow and Battleaxe, 8 Canvas Scraps. Upstairs: kill Lieutenant Benedict, open his chest (59.3, 57.6) with the key, read the Aged Envelope: <q>The Admiral's Orders</q>. Watch for Watch Commander Zalaphil (level 9).</p></div></li><li class="step past" data-i="19"><input class="check" type="checkbox" id="s19" data-i="19" aria-label="Schritt 20 erledigt">
-          <div><div class="meta"><span>20 · Durotar · L8</span><span class="mono">52.0, 43.5</span></div><p>Razor Hill: turn in For Honor, accept <q>Dark Storms</q> (Orgnil). Turn in Vanquish and The Admiral's Orders at Gar'Thok, accept the second Admiral's Orders (keep it for Orgrimmar) and <q>From The Wreckage...</q>. Turn in Carry Your Weight. Train at Dhugru Gorelust (54.4, 41.2).</p></div></li><li class="step past" data-i="20"><input class="check" type="checkbox" id="s20" data-i="20" aria-label="Schritt 21 erledigt">
-          <div><div class="meta"><span>21 · Durotar · L8</span><span class="mono">54.2, 73.3</span></div><p>Sen'jin: accept <q>Thwarting Kolkar Aggression</q> from Lar Prowltusk.</p></div></li><li class="step past" data-i="21"><input class="check" type="checkbox" id="s21" data-i="21" aria-label="Schritt 22 erledigt">
-          <div><div class="meta"><span>22 · Durotar · L8</span><span class="mono">55.9, 79.3</span></div><p>Scuttle Coast: kill crawlers for 8 Crawler Mucus, makrura for 4 eyes (underwater), 3 Taillasher Eggs, 3 Gnomish Toolboxes underwater.</p></div></li><li class="step past" data-i="22"><input class="check" type="checkbox" id="s22" data-i="22" aria-label="Schritt 23 erledigt">
-          <div><div class="meta"><span>23 · Durotar · L9</span><span class="mono">67.2, 70.7</span></div><p>4 Durotar Tiger Furs on the way to the Echo Isles. Bloodtalon Matriarch (level 9, 68.8, 71.8) is optional.</p></div></li><li class="step past" data-i="23"><input class="check" type="checkbox" id="s23" data-i="23" aria-label="Schritt 24 erledigt">
-          <div><div class="meta"><span>24 · Durotar · L9</span><span class="mono">67.8, 81.4</span></div><p>Echo Isles: 8 Forgotten Loa Idols, 8 Voodoo Trolls and 8 Hexed Trolls, Minshina's Skull at the prisoner (67.4, 87.8). Zalazane (level 10, heals himself) only if you feel strong: interrupt with the Imp or skip.</p></div></li><li class="step past" data-i="24"><input class="check" type="checkbox" id="s24" data-i="24" aria-label="Schritt 25 erledigt">
-          <div><div class="meta"><span>25 · Durotar · L10</span><span class="mono">56.0, 74.7</span></div><p>Sen'jin: turn in Minshina's Skull, Zalazane, Loa Idols, A Solvent Spirit, Practical Prey and the Matriarch.</p></div></li><li class="step past" data-i="25"><input class="check" type="checkbox" id="s25" data-i="25" aria-label="Schritt 26 erledigt">
-          <div><div class="meta"><span>26 · Durotar · L10</span><span class="mono">46.3, 78.6</span></div><p>Kolkar Crag: accept <q>Lost in the Shadows</q> (Pal'juh, new in Forever), escort her out. Click the three Attack Plans for Thwarting Kolkar Aggression. Turn both in at Sen'jin.</p></div></li><li class="step past" data-i="26"><input class="check" type="checkbox" id="s26" data-i="26" aria-label="Schritt 27 erledigt">
-          <div><div class="meta"><span>27 · Durotar · L10</span><span class="mono">52.2, 43.2</span></div><p>Hearth to Razor Hill. Accept <q>A Missing Hand</q> (Orgnil), turn in From The Wreckage, accept <q>Encroachment</q>, turn in Break a Few Eggs.</p></div></li><li class="step past" data-i="27"><input class="check" type="checkbox" id="s27" data-i="27" aria-label="Schritt 28 erledigt">
-          <div><div class="meta"><span>28 · Durotar · L10</span><span class="mono">47.3, 49.0</span></div><p>Razormane Grounds: 4 each of Quilboar, Scout, Dustrunner, Battleguard (Encroachment). Pull one at a time. Grind here until <b>level 10</b>.</p></div></li><li class="step past" data-i="28"><input class="check" type="checkbox" id="s28" data-i="28" aria-label="Schritt 29 erledigt">
-          <div><div class="meta"><span>29 · Durotar · L10</span><span class="mono">54.4, 41.2</span></div><p>Train at Dhugru (level 10: big batch). Accept <q>Conscript of the Horde</q> (Takrin, 50.8, 43.6) and <b><q>Gan'rul's Summons</q></b> from Ophek (54.4, 41.3).</p></div></li><li class="step past" data-i="29"><input class="check" type="checkbox" id="s29" data-i="29" aria-label="Schritt 30 erledigt">
-          <div><div class="meta"><span>30 · Durotar · L10</span><span class="mono">46.4, 22.9</span></div><p>North: accept <q>Winds in the Desert</q> at Rezlak, 5 supply sacks (49.1, 22.6), turn in, accept <q>Securing the Lines</q>.</p></div></li><li class="step past" data-i="30"><input class="check" type="checkbox" id="s30" data-i="30" aria-label="Schritt 31 erledigt">
-          <div><div class="meta"><span>31 · Durotar · L11</span><span class="mono">51.4, 20.9</span></div><p>Drygulch Ravine: 12 Dustwind Savages, 8 Storm Witches. A Dull Storm Orb drops: start <q>A Simmering Storm</q>. Turn in at Rezlak, accept <q>Stormy Potential</q>.</p></div></li><li class="step past" data-i="31"><input class="check" type="checkbox" id="s31" data-i="31" aria-label="Schritt 32 erledigt">
-          <div><div class="meta"><span>32 · Durotar · L11</span><span class="mono">43.6, 24.1</span></div><p>Thunder Ridge: 5 Thunder Lizard organs. Fizzle Darkstorm (42.1, 26.7, level 12): make a Healthstone, kill his imp first. Avoid Halikor (elite). Turn in Stormy Potential at Rezlak.</p></div></li><li class="step past" data-i="32"><input class="check" type="checkbox" id="s32" data-i="32" aria-label="Schritt 33 erledigt">
-          <div><div class="meta"><span>33 · Durotar · L11</span><span class="mono">58.6, 45.6</span></div><p>Heglan Shadeeye: turn in A Missing Hand, accept <q>Threat from Below</q> (new), pick up the dagger, trident and banner scrap nearby.</p></div></li><li class="step me" data-i="33"><input class="check" type="checkbox" id="s33" data-i="33" aria-label="Schritt 34 erledigt">
-          <div><div class="meta"><span>34 · Durotar · L11</span><span class="mono">52.2, 43.1</span><span class="now-tag">Aktuell</span></div><p>Razor Hill: train. Turn in Encroachment, Dark Storms (accept <q>Margoz</q>), Threat from Below (accept part 2).</p></div></li><li class="step " data-i="34"><input class="check" type="checkbox" id="s34" data-i="34" aria-label="Schritt 35 erledigt">
-          <div><div class="meta"><span>35 · Durotar · L11</span><span class="mono">56.6, 30.5</span></div><p>Spitelash naga beach: 9 Naga Spinefins. Then Margoz (56.4, 20.0): turn in, accept <q>Skull Rock</q>.</p></div></li><li class="step " data-i="35"><input class="check" type="checkbox" id="s35" data-i="35" aria-label="Schritt 36 erledigt">
-          <div><div class="meta"><span>36 · Durotar · L11</span><span class="mono">48.3, 45.3</span></div><p>Orgrimmar, Cleft of Shadow: turn in Gan'rul's Summons, accept <q>Creature of the Void</q>. If you skipped Wild Harvest: learn Herbalism at Jandi (55.4, 39.6). Staves at Hanashi (Valley of Honor, 10s) if you lack them.</p></div></li><li class="step " data-i="36"><input class="check" type="checkbox" id="s36" data-i="36" aria-label="Schritt 37 erledigt">
-          <div><div class="meta"><span>37 · Durotar · L12</span><span class="mono">55.0, 9.8</span></div><p>Skull Rock: 6 Searing Collars from Burning Blade Thugs/Neophytes. Far end, right passage: Tablet of Verga (51.6, 9.8). Skip Gazz'uz (level 14 with a Voidwalker) and <q>Burning Shadows</q>.</p></div></li><li class="step " data-i="37"><input class="check" type="checkbox" id="s37" data-i="37" aria-label="Schritt 38 erledigt">
-          <div><div class="meta"><span>38 · Durotar · L12</span><span class="mono">48.3, 45.3</span></div><p>Orgrimmar: turn in Creature of the Void, accept <q>The Binding</q>. Use the Glyphs at the circle, kill the Voidwalker, turn in: you get <b>Summon Voidwalker</b>. From now on the Voidwalker tanks.</p></div></li><li class="step " data-i="38"><input class="check" type="checkbox" id="s38" data-i="38" aria-label="Schritt 39 erledigt">
-          <div><div class="meta"><span>39 · Durotar · L12</span><span class="mono">56.4, 20.0</span></div><p>Margoz: turn in Skull Rock, accept <q>Neeru Fireblade</q> (keep it for Orgrimmar). Razor Hill: turn in Threat from Below. The group part with Aggor (elite) is optional.</p></div></li></ol>
-    </div></section>
-    <section class="band alt"><div class="in">
-      <h2>Mein Questlog.</h2>
-      <p class="lead">6 offen. Die Zahl ist das Quest-Level, rot ist schwer, grün leicht.</p>
-      <div class="gh">Durotar</div><div class="group"><div class="row"><span class="lv yel">11</span>
-              <div><a class="t" href="https://www.wowhead.com/classic/quest=99052" target="_blank" rel="noopener">Threat from Below</a><ul class="obj"><li class="">0/1 Aggor&#x27;s Belt</li></ul></div><span></span></div><div class="row"><span class="lv yel">12</span>
-              <div><a class="t" href="https://www.wowhead.com/classic/quest=840" target="_blank" rel="noopener">Conscript of the Horde</a><span class="ready">fertig</span><ul class="obj"><li class="ok">Follow the western road from Razor Hill to the Barrens over a bridge.
-
-Stop at the orc outpost across the bridge.
-
-Give Kargal Battlescar at the Barrens outpost your recruitment letter.</li></ul></div><span></span></div><div class="row"><span class="lv yel">12</span>
-              <div><a class="t" href="https://www.wowhead.com/classic/quest=828" target="_blank" rel="noopener">Margoz</a><span class="ready">fertig</span><ul class="obj"></ul></div><span></span></div></div><div class="gh">Ragefire Chasm</div><div class="group"><div class="row"><span class="lv red">16</span>
-              <div><a class="t" href="https://www.wowhead.com/classic/quest=5728" target="_blank" rel="noopener">Hidden Enemies</a><ul class="obj"><li class="">0/1 Bazzalan slain</li><li class="">0/1 Jergosh the Invoker slain</li></ul></div><span></span></div></div><div class="gh">Camping</div><div class="group"><div class="row"><span class="lv grn">6</span>
-              <div><a class="t" href="https://www.wowhead.com/classic/quest=97905" target="_blank" rel="noopener">Camping 101: Herbalism</a><ul class="obj"><li class="">Raise your herbalism skill to 20</li></ul></div><span></span></div><div class="row"><span class="lv grn">6</span>
-              <div><a class="t" href="https://www.wowhead.com/classic/quest=97907" target="_blank" rel="noopener">Camping 101: Mining</a><ul class="obj"><li class="">Raise your mining skill to 20</li></ul></div><span></span></div></div>
-    </div></section>
-    <section class="band"><div class="in">
-      <h2>Abgeschlossen.</h2>
-      <p class="lead">0 Quests, die neuesten zuerst.</p>
-      <div class="group"><div class="empty">Erscheint nach dem nächsten Sync.</div></div>
-    </div></section>
-    <footer><div class="in">Aktualisiert sich bei jedem Sync von selbst. Questdaten verlinkt auf Wowhead.</div></footer>
+    </div>
     <script>
     (() => {
-      const KEY = "qt-done", me = 33;
-      let done = {};
-      try { done = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch {}
-      const paint = () => {
-        document.querySelectorAll(".step").forEach(li => {
-          const on = !!done[li.dataset.i];
-          li.querySelector("input").checked = on; li.classList.toggle("mine-done", on);
+      const rows = [...document.querySelectorAll("tbody tr")];
+      const apply = f => {
+        let lastBand = null, shownInBand = 0;
+        const bands = [];
+        rows.forEach(tr => {
+          if (tr.dataset.band) { lastBand = tr; bands.push([tr, 0]); return; }
+          const ok = f === "all" || (f === "tog" ? tr.dataset.tog === "1" : tr.dataset.k === f);
+          tr.hidden = !ok; if (ok && bands.length) bands[bands.length - 1][1]++;
         });
-        const upto = [...Array(me + 1).keys()].filter(i => done[i]).length;
-        document.getElementById("prog").textContent = `${upto} von ${me + 1} erledigt`;
-        document.getElementById("progbar").style.width = (upto / (me + 1) * 100) + "%";
+        bands.forEach(([tr, n]) => tr.hidden = n === 0);
+        document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.f === f));
       };
-      document.querySelector(".steps").addEventListener("change", ev => {
-        const i = ev.target.dataset.i; if (i == null) return;
-        if (ev.target.checked) done[i] = 1; else delete done[i];
-        try { localStorage.setItem(KEY, JSON.stringify(done)); } catch {}
-        paint();
-      });
-      paint();
+      document.querySelector(".seg").addEventListener("click", e => { const b = e.target.closest("button"); if (b) apply(b.dataset.f); });
       document.querySelectorAll(".ts").forEach(el => {
-        const d = new Date(+el.dataset.t * 1000);
-        el.textContent = d.toLocaleString("de-DE", el.dataset.f === "long" ? { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" } : { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+        el.textContent = new Date(+el.dataset.t * 1000).toLocaleString("de-DE", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
       });
     })();
     </script>
