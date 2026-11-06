@@ -6,119 +6,113 @@
 <meta name="robots" content="noindex">
 <title>Quest-Stand</title>
     <style>
-    /* Inset grouped lists like iOS Settings: soft grey ground, white cards, hairline separators, one purple accent (Warlock). Light and dark follow the system. */
+    /* apple.com-style product page: white and #f5f5f7 bands, big tight headlines, one blue for links and checks. Light only by choice. */
     :root {
-      --bg: #f2f2f7; --card: #ffffff; --fill: rgba(120,120,128,.12); --sep: rgba(60,60,67,.16);
-      --label: #1c1c1e; --label2: rgba(60,60,67,.62); --label3: rgba(60,60,67,.38);
-      --accent: #8e44ec; --green: #34c759; --orange: #ff9500; --red: #ff3b30; --yellow: #c99700; --gray: #8e8e93;
-      --bar: rgba(242,242,247,.72); --shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.05);
-      --f: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
-      --fd: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
-      --fm: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
       color-scheme: light;
+      --bg: #ffffff; --alt: #f5f5f7; --ink: #1d1d1f; --ink2: #6e6e73; --ink3: #86868b; --line: #d2d2d7;
+      --blue: #0071e3; --link: #0066cc; --green: #1d9b3a; --orange: #c46a00; --red: #d70015; --amber: #a87a00; --gray: #86868b;
+      --f: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      --fd: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI Variable Display", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      --fm: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
     }
-    @media (prefers-color-scheme: dark) { :root {
-      --bg: #000000; --card: #1c1c1e; --fill: rgba(118,118,128,.24); --sep: rgba(84,84,88,.6);
-      --label: #ffffff; --label2: rgba(235,235,245,.6); --label3: rgba(235,235,245,.3);
-      --accent: #bf5af2; --green: #30d158; --orange: #ff9f0a; --red: #ff453a; --yellow: #ffd60a; --gray: #98989d;
-      --bar: rgba(0,0,0,.6); --shadow: none; color-scheme: dark;
-    } }
     * { box-sizing: border-box; }
-    html { -webkit-text-size-adjust: 100%; }
-    body { margin: 0; background: var(--bg); color: var(--label); font: 17px/1.42 var(--f); letter-spacing: -.01em; -webkit-font-smoothing: antialiased; }
-    a { color: var(--accent); text-decoration: none; } a:hover { text-decoration: underline; }
-    a:focus-visible, input:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 50%, transparent); outline-offset: 2px; border-radius: 6px; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.47 var(--f); letter-spacing: -.022em; -webkit-font-smoothing: antialiased; }
+    a { color: var(--link); text-decoration: none; } a:hover { text-decoration: underline; }
+    a:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 4px; }
     .mono { font-family: var(--fm); font-variant-numeric: tabular-nums; letter-spacing: 0; }
-    .bar { position: sticky; top: 0; z-index: 5; backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); background: var(--bar); border-bottom: .5px solid var(--sep); }
-    .bar .in { max-width: 720px; margin: 0 auto; padding: 10px max(20px, env(safe-area-inset-right, 0px)) 10px max(20px, env(safe-area-inset-left, 0px)); display: flex; justify-content: space-between; align-items: center; font-size: 15px; }
-    .bar b { font-weight: 600; } .bar span { color: var(--label2); font-size: 13px; }
-    .wrap { max-width: 720px; margin: 0 auto; padding-block: 28px 72px; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); display: grid; gap: 34px; }
-    .hero { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 20px; align-items: center; }
-    .ring { position: relative; width: 84px; height: 84px; }
-    .ring svg { width: 84px; height: 84px; transform: rotate(-90deg); }
-    .ring .track { stroke: var(--fill); } .ring .val { stroke: var(--accent); stroke-linecap: round; transition: stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1); }
-    .ring .num { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; line-height: 1; }
-    .ring .num b { font: 700 28px var(--fd); letter-spacing: -.02em; } .ring .num small { display: block; font-size: 11px; color: var(--label2); margin-top: 3px; text-transform: uppercase; letter-spacing: .04em; }
-    .eyebrow { font-size: 13px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; }
-    h1 { font: 700 34px/1.1 var(--fd); letter-spacing: -.025em; margin: 2px 0 4px; text-wrap: balance; }
-    .sub { color: var(--label2); font-size: 15px; }
-    .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-    .tile { background: var(--card); border-radius: 16px; padding: 14px 16px; box-shadow: var(--shadow); }
-    .tile small { display: block; font-size: 13px; color: var(--label2); }
-    .tile b { font: 600 26px var(--fd); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
-    .now { background: var(--card); border-radius: 20px; padding: 20px 22px; box-shadow: var(--shadow); display: grid; gap: 10px; }
-    .now .top { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-    .pill { background: var(--accent); color: #fff; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px; }
-    .chip { background: var(--fill); color: var(--label); font-size: 13px; padding: 3px 10px; border-radius: 999px; }
-    .now p { margin: 0; font-size: 19px; line-height: 1.45; }
-    .now .foot { font-size: 13px; color: var(--label2); }
-    q { quotes: none; font-weight: 600; color: var(--label); } q::before, q::after { content: none; }
-    h2 { font: 700 22px var(--fd); letter-spacing: -.02em; margin: 0 0 4px; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
-    h2 span { font: 400 15px var(--f); color: var(--label2); letter-spacing: 0; }
-    .hint { font-size: 13px; color: var(--label2); margin: 0 4px 10px; }
-    .group { background: var(--card); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }
-    .group + .group { margin-top: 14px; }
-    .gh { font-size: 13px; color: var(--label2); text-transform: uppercase; letter-spacing: .04em; margin: 18px 4px 6px; }
-    .row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 12px 16px; position: relative; }
-    .row + .row::before { content: ""; position: absolute; top: 0; left: 52px; right: 0; border-top: .5px solid var(--sep); }
-    .row .t { font-weight: 500; } .row .d { font-size: 14px; color: var(--label2); margin-top: 2px; }
-    .row .r { font-size: 14px; color: var(--label3); white-space: nowrap; padding-top: 2px; }
-    .lv { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; font: 600 13px var(--f); color: #fff; margin-top: 1px; }
-    .lv.red { background: var(--red); } .lv.org { background: var(--orange); } .lv.yel { background: var(--yellow); } .lv.grn { background: var(--green); } .lv.gry { background: var(--gray); }
-    .obj { list-style: none; margin: 4px 0 0; padding: 0; font-size: 14px; color: var(--label2); }
+    .in { max-width: 980px; margin: 0 auto; padding-left: max(22px, env(safe-area-inset-left, 0px)); padding-right: max(22px, env(safe-area-inset-right, 0px)); }
+    .nav { position: sticky; top: 0; z-index: 9; background: rgba(251,251,253,.8); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid rgba(0,0,0,.08); }
+    .nav .in { height: 48px; display: flex; align-items: center; justify-content: space-between; font-size: 12px; letter-spacing: -.01em; }
+    .nav b { font-size: 21px; font-weight: 600; letter-spacing: .011em; } .nav span { color: var(--ink2); }
+    .band { padding-block: 72px; } .band.alt { background: var(--alt); }
+    .hero { text-align: center; padding-block: 80px 64px; }
+    .eyebrow { font-size: 21px; font-weight: 600; color: var(--ink2); letter-spacing: .011em; }
+    .hero h1 { font: 700 clamp(48px, 9vw, 80px)/1.05 var(--fd); letter-spacing: -.015em; margin: 6px 0 10px; }
+    .hero .sub { font-size: clamp(19px, 2.6vw, 24px); color: var(--ink2); letter-spacing: .009em; }
+    .xp { max-width: 420px; margin: 28px auto 8px; height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
+    .xp i { display: block; height: 100%; background: var(--ink); border-radius: 2px; }
+    .xpl { font-size: 14px; color: var(--ink3); }
+    h2 { font: 700 clamp(32px, 5vw, 48px)/1.08 var(--fd); letter-spacing: -.01em; margin: 0 0 8px; }
+    .lead { font-size: 21px; color: var(--ink2); margin: 0 0 32px; max-width: 640px; letter-spacing: .011em; }
+    .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; text-align: center; }
+    .stat b { display: block; font: 600 clamp(40px, 7vw, 64px)/1 var(--fd); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+    .stat span { display: block; margin-top: 8px; font-size: 17px; color: var(--ink2); }
+    .now { background: var(--bg); border-radius: 28px; padding: clamp(28px, 5vw, 48px); }
+    .band:not(.alt) .now { background: var(--alt); }
+    .now .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+    .chip { font-size: 14px; color: var(--ink2); border: 1px solid var(--line); padding: 4px 12px; border-radius: 980px; }
+    .chip.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+    .now p { margin: 0; font: 600 clamp(22px, 3.2vw, 32px)/1.25 var(--fd); letter-spacing: -.005em; }
+    .now .foot { margin-top: 18px; font-size: 14px; color: var(--ink3); }
+    q { quotes: none; font-weight: 600; } q::before, q::after { content: none; }
+    .now q { color: var(--ink); }
+    .vs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; text-align: center; margin-bottom: 40px; }
+    .tile small { display: block; font-size: 17px; color: var(--ink2); }
+    .tile b { display: block; font: 600 clamp(40px, 7vw, 64px)/1.1 var(--fd); letter-spacing: -.02em; }
+    .gh { font-size: 21px; font-weight: 600; letter-spacing: .011em; margin: 40px 0 6px; }
+    .gh:first-child { margin-top: 0; }
+    .group { border-top: 1px solid var(--line); }
+    .row { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 14px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--line); }
+    .row .t { font-weight: 500; } .row .r { font-size: 14px; color: var(--ink3); white-space: nowrap; }
+    .lv { font: 600 15px var(--f); font-variant-numeric: tabular-nums; }
+    .lv.red { color: var(--red); } .lv.org { color: var(--orange); } .lv.yel { color: var(--amber); } .lv.grn { color: var(--green); } .lv.gry { color: var(--gray); }
+    .obj { list-style: none; margin: 4px 0 0; padding: 0; font-size: 15px; color: var(--ink2); }
     .obj li.ok { color: var(--green); } .obj li.ok::before { content: "✓ "; }
-    .ready { display: inline-block; font-size: 12px; font-weight: 600; color: var(--green); background: color-mix(in srgb, var(--green) 14%, transparent); padding: 1px 8px; border-radius: 999px; margin-left: 6px; vertical-align: 1px; }
-    .prog { height: 6px; background: var(--fill); border-radius: 999px; overflow: hidden; margin: 2px 4px 14px; }
-    .prog i { display: block; height: 100%; width: 0; background: var(--green); border-radius: 999px; transition: width .5s cubic-bezier(.2,.8,.2,1); }
-    .steps { list-style: none; margin: 0; padding: 0; }
-    .step { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; padding: 13px 16px; position: relative; }
-    .step + .step::before { content: ""; position: absolute; top: 0; left: 56px; right: 0; border-top: .5px solid var(--sep); }
-    .check { appearance: none; -webkit-appearance: none; width: 24px; height: 24px; margin: 0; border-radius: 50%; border: 1.5px solid var(--label3); cursor: pointer; display: grid; place-items: center; transition: background .15s, border-color .15s; }
-    .check:checked { background: var(--green); border-color: var(--green); }
+    .ready { font-size: 14px; font-weight: 600; color: var(--green); margin-left: 8px; }
+    .hint { font-size: 14px; color: var(--ink3); margin: 14px 0 0; }
+    .empty { padding: 18px 0; color: var(--ink2); border-bottom: 1px solid var(--line); }
+    .progress { display: flex; align-items: center; gap: 16px; margin: -8px 0 28px; }
+    .progress .track { flex: 1; height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
+    .progress i { display: block; height: 100%; width: 0; background: var(--blue); transition: width .5s cubic-bezier(.25,.1,.25,1); }
+    .progress span { font-size: 15px; color: var(--ink2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .steps { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+    .step { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 14px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+    .check { appearance: none; -webkit-appearance: none; width: 24px; height: 24px; margin: 2px 0 0; border-radius: 50%; border: 1.5px solid var(--ink3); cursor: pointer; display: grid; place-items: center; transition: background .2s, border-color .2s; }
+    .check:checked { background: var(--blue); border-color: var(--blue); }
     .check:checked::after { content: ""; width: 6px; height: 11px; border: solid #fff; border-width: 0 2px 2px 0; transform: translateY(-1px) rotate(45deg); }
-    .step .meta { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: 13px; color: var(--label2); }
-    .step p { margin: 3px 0 0; font-size: 15px; color: var(--label); }
-    .step.past p { color: var(--label2); }
-    .step.mine-done p { color: var(--label3); text-decoration: line-through; }
-    .step.me { background: color-mix(in srgb, var(--accent) 9%, var(--card)); }
-    .step .now-tag { background: var(--accent); color: #fff; font-weight: 600; font-size: 11px; padding: 2px 8px; border-radius: 999px; }
-    .empty { padding: 16px; color: var(--label2); font-size: 15px; }
-    details.more { margin-top: 14px; } details.more summary { cursor: pointer; color: var(--accent); font-size: 15px; margin: 0 4px 8px; }
-    footer { text-align: center; font-size: 13px; color: var(--label3); }
-    @media (max-width: 520px) { h1 { font-size: 28px; } .tiles { gap: 8px; } .tile b { font-size: 22px; } .now p { font-size: 17px; } }
+    .step .meta { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; font-size: 14px; color: var(--ink3); }
+    .step p { margin: 4px 0 0; }
+    .step.past p { color: var(--ink2); }
+    .step.mine-done p { color: var(--ink3); text-decoration: line-through; text-decoration-color: var(--line); }
+    .step.me { background: linear-gradient(90deg, rgba(0,113,227,.06), transparent 70%); }
+    .now-tag { font-size: 12px; font-weight: 600; color: #fff; background: var(--blue); padding: 2px 9px; border-radius: 980px; }
+    details.more { margin-top: 28px; }
+    details.more summary { cursor: pointer; color: var(--link); font-size: 17px; list-style: none; }
+    details.more summary::after { content: " ›"; } details.more[open] summary { margin-bottom: 12px; }
+    footer { background: var(--alt); color: var(--ink3); font-size: 12px; padding-block: 22px; border-top: 1px solid var(--line); }
+    @media (max-width: 640px) { .band { padding-block: 52px; } .hero { padding-block: 56px 44px; } .stats, .vs { gap: 10px; } .stat span, .tile small { font-size: 14px; } }
     @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
     </style>
-    <div class="bar"><div class="in"><b>Quest-Stand</b><span>Aktualisiert <span class="ts" data-t="1793994344"></span></span></div></div>
-    </head>
-<body>
-<div class="wrap">
-      <header class="hero">
-        <div class="ring" role="img" aria-label="Level 11, 83 Prozent">
-          <svg viewBox="0 0 84 84"><circle class="track" cx="42" cy="42" r="34" fill="none" stroke-width="8"/><circle class="val" cx="42" cy="42" r="34" fill="none" stroke-width="8" stroke-dasharray="213.6" stroke-dashoffset="36.0"/></svg>
-          <div class="num"><div><b>11</b><small>Level</small></div></div>
-        </div>
-        <div>
-          <div class="eyebrow">WoW Forever · Orc Hexenmeister</div>
-          <h1>Quest-Stand</h1>
-          <div class="sub">Horde · gerade in Durotar · 83 % bis Level 12</div>
-        </div>
-      </header>
-      <div class="tiles">
-        <div class="tile"><small>Schritt</small><b>34</b><small>von 77</small></div>
-        <div class="tile"><small>Erledigt</small><b>64</b><small>Quests</small></div>
-        <div class="tile"><small>Offen</small><b>6</b><small>im Questlog</small></div>
+    <nav class="nav"><div class="in"><b>Quest-Stand</b><span>Aktualisiert <span class="ts" data-t="1793994344"></span></span></div></nav>
+    <header class="hero in">
+      <div class="eyebrow">WoW Forever · Orc Hexenmeister</div>
+      <h1>Level 11.</h1>
+      <div class="sub">Horde · gerade in Durotar</div>
+      <div class="xp" role="img" aria-label="83 Prozent bis Level 12"><i style="width:83.2%"></i></div>
+      <div class="xpl">83 % bis Level 12</div>
+    </header>
+    <section class="band alt"><div class="in">
+      <div class="stats">
+        <div class="stat"><b>34</b><span>von 77 Schritten</span></div>
+        <div class="stat"><b>64</b><span>Quests erledigt</span></div>
+        <div class="stat"><b>6</b><span>im Questlog</span></div>
       </div>
-      <section><h2>Abgleich</h2><div class="group"><div class="empty">Sobald du das Addon und das Sync-Skript eingerichtet hast und im Spiel <span class="mono">/wp sync</span> eingibst, steht hier, wie viele Quests dir bis zu mir fehlen und welche wir zusammen machen können.</div></div></section>
-      <section class="now">
-        <div class="top"><span class="pill">Aktuell</span><span class="chip">Durotar</span><span class="chip">ab Level 11</span><span class="chip mono">52.2, 43.1</span></div>
+    </div></section>
+    <section class="band"><div class="in">
+      <h2>Gerade dran.</h2>
+      <p class="lead">Wo ich in der Route stehe, auch wenn ich offline bin.</p>
+      <div class="now">
+        <div class="tags"><span class="chip on">Schritt 34</span><span class="chip">Durotar</span><span class="chip">ab Level 11</span><span class="chip mono">52.2, 43.1</span></div>
         <p>Razor Hill: train. Turn in Encroachment, Dark Storms (accept <q>Margoz</q>), Threat from Below (accept part 2).</p>
-        <div class="foot">Stand <span class="ts" data-t="1793994344" data-f="long"></span>. Gilt auch, wenn ich gerade offline bin.</div>
-      </section>
-      <section>
-        <h2>Dein Weg zu mir <span id="prog"></span></h2>
-        <div class="prog"><i id="progbar"></i></div>
-        <p class="hint">Hak ab, was du erledigt hast. Dein Browser merkt es sich. Koordinaten passen zu TomTom: <span class="mono">/way x y</span></p>
-        <ol class="steps group"><li class="step past" data-i="0"><input class="check" type="checkbox" id="s0" data-i="0" aria-label="Schritt 1 erledigt">
+        <div class="foot">Stand <span class="ts" data-t="1793994344" data-f="long"></span></div>
+      </div>
+    </div></section>
+    <section class="band alt"><div class="in"><h2>Du und ich.</h2><p class="lead">Sobald du Addon und Sync-Skript eingerichtet hast und im Spiel <span class="mono">/wp sync</span> eingibst, steht hier, wie viele Quests dir bis zu mir fehlen und welche wir zusammen machen können.</p></div></section>
+    <section class="band"><div class="in">
+      <h2>Dein Weg zu mir.</h2>
+      <p class="lead">Die Route Schritt für Schritt. Hak ab, was du erledigt hast, dein Browser merkt es sich. Koordinaten passen zu TomTom: <span class="mono">/way x y</span></p>
+      <div class="progress"><div class="track"><i id="progbar"></i></div><span id="prog"></span></div>
+      <ol class="steps"><li class="step past" data-i="0"><input class="check" type="checkbox" id="s0" data-i="0" aria-label="Schritt 1 erledigt">
           <div><div class="meta"><span>1 · Valley of Trials · L1</span><span class="mono">43.3, 68.5</span></div><p>Accept <q>Your Place in the World</q> from Kaltunk, turn it in to Gornek inside the Den (42.1, 68.3). Accept <q>Cutting Teeth</q> and <q>Wayward Weapons</q>. Accept <q>Vile Familiars</q> from Ruzan (42.6, 69.0).</p></div></li><li class="step past" data-i="1"><input class="check" type="checkbox" id="s1" data-i="1" aria-label="Schritt 2 erledigt">
           <div><div class="meta"><span>2 · Valley of Trials · L1</span><span class="mono">42.7, 71.6</span></div><p>Kill 10 Mottled Boars and pick up 6 Abandoned Training Weapons on the ground.</p></div></li><li class="step past" data-i="2"><input class="check" type="checkbox" id="s2" data-i="2" aria-label="Schritt 3 erledigt">
           <div><div class="meta"><span>3 · Valley of Trials · L2</span><span class="mono">42.9, 69.2</span></div><p>Den: accept <q>Tainted Parchment</q> and <q>Tainted Tablet</q> (if offered) from Gornek. Train at Nartok (40.6, 68.5). Turn in Cutting Teeth, accept <q>Sting of the Scorpid</q>. Turn in Tainted Parchment at Nartok, Wayward Weapons at Kzan (40.5, 68.0). Accept <q>Galgar's Cactus Apple Surprise</q> from Galgar (42.7, 67.2).</p></div></li><li class="step past" data-i="3"><input class="check" type="checkbox" id="s3" data-i="3" aria-label="Schritt 4 erledigt">
@@ -158,10 +152,11 @@
           <div><div class="meta"><span>37 · Durotar · L12</span><span class="mono">55.0, 9.8</span></div><p>Skull Rock: 6 Searing Collars from Burning Blade Thugs/Neophytes. Far end, right passage: Tablet of Verga (51.6, 9.8). Skip Gazz'uz (level 14 with a Voidwalker) and <q>Burning Shadows</q>.</p></div></li><li class="step " data-i="37"><input class="check" type="checkbox" id="s37" data-i="37" aria-label="Schritt 38 erledigt">
           <div><div class="meta"><span>38 · Durotar · L12</span><span class="mono">48.3, 45.3</span></div><p>Orgrimmar: turn in Creature of the Void, accept <q>The Binding</q>. Use the Glyphs at the circle, kill the Voidwalker, turn in: you get <b>Summon Voidwalker</b>. From now on the Voidwalker tanks.</p></div></li><li class="step " data-i="38"><input class="check" type="checkbox" id="s38" data-i="38" aria-label="Schritt 39 erledigt">
           <div><div class="meta"><span>39 · Durotar · L12</span><span class="mono">56.4, 20.0</span></div><p>Margoz: turn in Skull Rock, accept <q>Neeru Fireblade</q> (keep it for Orgrimmar). Razor Hill: turn in Threat from Below. The group part with Aggor (elite) is optional.</p></div></li></ol>
-      </section>
-      <section>
-        <h2>Mein Questlog <span>6 offen</span></h2>
-        <div class="gh">Durotar</div><div class="group"><div class="row"><span class="lv yel">11</span>
+    </div></section>
+    <section class="band alt"><div class="in">
+      <h2>Mein Questlog.</h2>
+      <p class="lead">6 offen. Die Zahl ist das Quest-Level, rot ist schwer, grün leicht.</p>
+      <div class="gh">Durotar</div><div class="group"><div class="row"><span class="lv yel">11</span>
               <div><a class="t" href="https://www.wowhead.com/classic/quest=99052" target="_blank" rel="noopener">Threat from Below</a><ul class="obj"><li class="">0/1 Aggor&#x27;s Belt</li></ul></div><span></span></div><div class="row"><span class="lv yel">12</span>
               <div><a class="t" href="https://www.wowhead.com/classic/quest=840" target="_blank" rel="noopener">Conscript of the Horde</a><span class="ready">fertig</span><ul class="obj"><li class="ok">Follow the western road from Razor Hill to the Barrens over a bridge.
 
@@ -172,14 +167,13 @@ Give Kargal Battlescar at the Barrens outpost your recruitment letter.</li></ul>
               <div><a class="t" href="https://www.wowhead.com/classic/quest=5728" target="_blank" rel="noopener">Hidden Enemies</a><ul class="obj"><li class="">0/1 Bazzalan slain</li><li class="">0/1 Jergosh the Invoker slain</li></ul></div><span></span></div></div><div class="gh">Camping</div><div class="group"><div class="row"><span class="lv grn">6</span>
               <div><a class="t" href="https://www.wowhead.com/classic/quest=97905" target="_blank" rel="noopener">Camping 101: Herbalism</a><ul class="obj"><li class="">Raise your herbalism skill to 20</li></ul></div><span></span></div><div class="row"><span class="lv grn">6</span>
               <div><a class="t" href="https://www.wowhead.com/classic/quest=97907" target="_blank" rel="noopener">Camping 101: Mining</a><ul class="obj"><li class="">Raise your mining skill to 20</li></ul></div><span></span></div></div>
-        <p class="hint" style="margin-top:10px">Die Zahl ist das Quest-Level, farbig wie im Spiel: rot ist schwer, grün leicht.</p>
-      </section>
-      <section>
-        <h2>Abgeschlossen <span>0</span></h2>
-        <div class="group"><div class="empty">Erscheint nach dem nächsten Sync.</div></div>
-      </section>
-      <footer>Aktualisiert sich bei jedem Sync von selbst.</footer>
-    </div>
+    </div></section>
+    <section class="band"><div class="in">
+      <h2>Abgeschlossen.</h2>
+      <p class="lead">0 Quests, die neuesten zuerst.</p>
+      <div class="group"><div class="empty">Erscheint nach dem nächsten Sync.</div></div>
+    </div></section>
+    <footer><div class="in">Aktualisiert sich bei jedem Sync von selbst. Questdaten verlinkt auf Wowhead.</div></footer>
     <script>
     (() => {
       const KEY = "qt-done", me = 33;
@@ -191,7 +185,7 @@ Give Kargal Battlescar at the Barrens outpost your recruitment letter.</li></ul>
           li.querySelector("input").checked = on; li.classList.toggle("mine-done", on);
         });
         const upto = [...Array(me + 1).keys()].filter(i => done[i]).length;
-        document.getElementById("prog").textContent = `${upto} von ${me + 1}`;
+        document.getElementById("prog").textContent = `${upto} von ${me + 1} erledigt`;
         document.getElementById("progbar").style.width = (upto / (me + 1) * 100) + "%";
       };
       document.querySelector(".steps").addEventListener("change", ev => {
@@ -203,7 +197,7 @@ Give Kargal Battlescar at the Barrens outpost your recruitment letter.</li></ul>
       paint();
       document.querySelectorAll(".ts").forEach(el => {
         const d = new Date(+el.dataset.t * 1000);
-        el.textContent = d.toLocaleString("de-DE", el.dataset.f === "long" ? { weekday: "short", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" } : { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+        el.textContent = d.toLocaleString("de-DE", el.dataset.f === "long" ? { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" } : { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
       });
     })();
     </script>
