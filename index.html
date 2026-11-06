@@ -1,156 +1,166 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
 <title>Quest Tracker</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Alegreya+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<style>
-/* One column like a quest journal: ink-dark page, quest-yellow headings, difficulty colours from the game's quest log. Deliberately dark only. */
-:root {
-  color-scheme: dark;
-  --bg: #0d0c0a; --panel: #15130f; --line: #2a2620; --text: #ece6d8; --muted: #9b9384; --faint: #6a6357;
-  --gold: #f2c443; --warlock: #9d8ff2; --ok: #4fd65c;
-  --red: #ff5148; --org: #ff9a3c; --yel: #f2c443; --grn: #4fd65c; --gry: #7d786e;
-  --f-display: "Cinzel", Georgia, serif; --f-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif; --f-data: "IBM Plex Mono", ui-monospace, Consolas, monospace;
-}
-* { box-sizing: border-box; }
-body { background: var(--bg); color: var(--text); font: 16px/1.5 var(--f-body); margin: 0; }
-.wrap { max-width: 760px; margin: 0 auto; padding-block: 36px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 30px; }
-a { color: var(--text); text-decoration-color: var(--faint); text-underline-offset: 3px; }
-a:hover { color: var(--gold); }
-a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
-header { display: grid; grid-template-columns: auto 1fr; gap: 6px 18px; align-items: center; }
-.lvl { grid-row: span 2; width: 62px; height: 62px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; font: 500 1.5rem var(--f-data); color: var(--gold); }
-h1 { font: 600 1.7rem var(--f-display); margin: 0; color: var(--warlock); text-wrap: balance; }
-.sub { color: var(--muted); font-size: .92rem; }
-.xp { grid-column: 1 / -1; height: 5px; background: var(--line); border-radius: 3px; overflow: hidden; }
-.xp i { display: block; height: 100%; width: 83.2%; background: #9a4fd1; }
-.meta { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 4px 18px; font: .82rem var(--f-data); color: var(--faint); }
-h2 { font: 600 1.05rem var(--f-display); letter-spacing: .04em; color: var(--gold); margin: 0 0 6px; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-h2 span { font: 500 .85rem var(--f-data); color: var(--muted); letter-spacing: 0; }
-.zone { font: 500 .72rem var(--f-body); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin: 18px 0 2px; }
-.quest { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); }
-.quest ul { margin: 3px 0 0; padding: 0; list-style: none; font-size: .88rem; color: var(--muted); }
-.quest li.ok { color: var(--ok); text-decoration: line-through; text-decoration-color: rgba(79, 214, 92, .5); }
-.lv { font: 500 .85rem var(--f-data); padding-top: 2px; }
-.lv.red { color: var(--red); } .lv.org { color: var(--org); } .lv.yel { color: var(--yel); } .lv.grn { color: var(--grn); } .lv.gry { color: var(--gry); }
-.ready { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ok); border: 1px solid currentColor; border-radius: 2px; padding: 0 5px; white-space: nowrap; }
-.done { columns: 2 260px; column-gap: 28px; margin: 0; padding: 0; list-style: none; }
-.done li { break-inside: avoid; padding: 4px 0; border-bottom: 1px solid var(--line); font-size: .92rem; }
-.when { font: .74rem var(--f-data); color: var(--faint); }
-.note { font-size: .85rem; color: var(--faint); }
-.empty { color: var(--faint); font-size: .9rem; padding: 8px 0; }
-.where { border: 1px solid var(--line); background: var(--panel); border-radius: 4px; padding: 14px 16px; display: grid; gap: 4px; }
-.where b { color: var(--gold); font-weight: 500; }
-.steps { list-style: none; margin: 0; padding: 0; }
-.step { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
-.step label { display: flex; gap: 8px; align-items: flex-start; cursor: pointer; }
-.step input { width: 18px; height: 18px; accent-color: var(--ok); margin-top: 3px; }
-.step .n { font: .8rem var(--f-data); color: var(--faint); padding-top: 3px; }
-.step p { margin: 2px 0 0; font-size: .93rem; color: var(--muted); }
-.step q { quotes: none; color: var(--gold); } .step q::before, .step q::after { content: none; }
-.step.past p { color: var(--faint); }
-.step.me { background: linear-gradient(90deg, rgba(157,143,242,.10), transparent); border-left: 2px solid var(--warlock); padding-left: 8px; }
-.step.mine-done p { text-decoration: line-through; text-decoration-color: rgba(79,214,92,.5); }
-.sh { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; font-size: .78rem; }
-.ch { color: var(--muted); letter-spacing: .04em; }
-.coord { font-family: var(--f-data); color: var(--gold); }
-.here { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--warlock); border: 1px solid currentColor; border-radius: 2px; padding: 0 5px; }
-.progress { font: .85rem var(--f-data); color: var(--muted); }
-</style>
+    <meta name="claude:viewport-fit-sides" content="cover">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Alegreya+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+    <style>
+    /* One column like a quest journal: ink-dark page, quest-yellow headings, difficulty colours from the game's quest log. Deliberately dark only. */
+    :root {
+      color-scheme: dark;
+      --bg: #0d0c0a; --panel: #15130f; --line: #2a2620; --text: #ece6d8; --muted: #9b9384; --faint: #6a6357;
+      --gold: #f2c443; --warlock: #9d8ff2; --ok: #4fd65c;
+      --red: #ff5148; --org: #ff9a3c; --yel: #f2c443; --grn: #4fd65c; --gry: #7d786e;
+      --f-display: "Cinzel", Georgia, serif; --f-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif; --f-data: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font: 16px/1.5 var(--f-body); margin: 0; }
+    .wrap { max-width: 760px; margin: 0 auto; padding-block: 36px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 30px; }
+    a { color: var(--text); text-decoration-color: var(--faint); text-underline-offset: 3px; }
+    a:hover { color: var(--gold); }
+    a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+    header { display: grid; grid-template-columns: auto 1fr; gap: 6px 18px; align-items: center; }
+    .lvl { grid-row: span 2; width: 62px; height: 62px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; font: 500 1.5rem var(--f-data); color: var(--gold); }
+    h1 { font: 600 1.7rem var(--f-display); margin: 0; color: var(--warlock); text-wrap: balance; }
+    .sub { color: var(--muted); font-size: .92rem; }
+    .xp { grid-column: 1 / -1; height: 5px; background: var(--line); border-radius: 3px; overflow: hidden; }
+    .xp i { display: block; height: 100%; width: 83.2%; background: #9a4fd1; }
+    .meta { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 4px 18px; font: .82rem var(--f-data); color: var(--faint); }
+    h2 { font: 600 1.05rem var(--f-display); letter-spacing: .04em; color: var(--gold); margin: 0 0 6px; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+    h2 span { font: 500 .85rem var(--f-data); color: var(--muted); letter-spacing: 0; }
+    .zone { font: 500 .72rem var(--f-body); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin: 18px 0 2px; }
+    .quest { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+    .quest ul { margin: 3px 0 0; padding: 0; list-style: none; font-size: .88rem; color: var(--muted); }
+    .quest li.ok { color: var(--ok); text-decoration: line-through; text-decoration-color: rgba(79, 214, 92, .5); }
+    .lv { font: 500 .85rem var(--f-data); padding-top: 2px; }
+    .lv.red { color: var(--red); } .lv.org { color: var(--org); } .lv.yel { color: var(--yel); } .lv.grn { color: var(--grn); } .lv.gry { color: var(--gry); }
+    .ready { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ok); border: 1px solid currentColor; border-radius: 2px; padding: 0 5px; white-space: nowrap; }
+    .done { columns: 2 260px; column-gap: 28px; margin: 0; padding: 0; list-style: none; }
+    .done li { break-inside: avoid; padding: 4px 0; border-bottom: 1px solid var(--line); font-size: .92rem; }
+    .when { font: .74rem var(--f-data); color: var(--faint); }
+    .note { font-size: .85rem; color: var(--faint); }
+    .empty { color: var(--faint); font-size: .9rem; padding: 8px 0; }
+    .where { border: 1px solid var(--line); background: var(--panel); border-radius: 4px; padding: 14px 16px; display: grid; gap: 4px; }
+    .where b { color: var(--gold); font-weight: 500; }
+    .steps { list-style: none; margin: 0; padding: 0; }
+    .step { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+    .step label { display: flex; gap: 8px; align-items: flex-start; cursor: pointer; }
+    .step input { width: 18px; height: 18px; accent-color: var(--ok); margin-top: 3px; }
+    .step .n { font: .8rem var(--f-data); color: var(--faint); padding-top: 3px; }
+    .step p { margin: 2px 0 0; font-size: .93rem; color: var(--muted); }
+    .step q { quotes: none; color: var(--gold); } .step q::before, .step q::after { content: none; }
+    .step.past p { color: var(--faint); }
+    .step.me { background: linear-gradient(90deg, rgba(157,143,242,.10), transparent); border-left: 2px solid var(--warlock); padding-left: 8px; }
+    .step.mine-done p { text-decoration: line-through; text-decoration-color: rgba(79,214,92,.5); }
+    .sh { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; font-size: .78rem; }
+    .ch { color: var(--muted); letter-spacing: .04em; }
+    .coord { font-family: var(--f-data); color: var(--gold); }
+    .here { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--warlock); border: 1px solid currentColor; border-radius: 2px; padding: 0 5px; }
+    .progress { font: .85rem var(--f-data); color: var(--muted); }
+    </style>
+    </head>
+<body>
 <div class="wrap">
-  <header>
-    <div class="lvl">11</div>
-    <h1>Mr</h1>
-    <div class="sub">Orc Hexenmeister · Horde · gerade in Durotar</div>
-    <div class="xp" aria-label="Erfahrung 83 Prozent"><i></i></div>
-    <div class="meta"><span>7.319 / 8.800 EP (83 %)</span><span>64 Quests erledigt</span><span>Stand 06.11.2026, 20:45</span></div>
-  </header>
-  <div class="where"><span>Mr ist bei <b>Schritt 34 von 77</b> der Route (Durotar, ab Level 11), in Durotar.</span>
-    <span class="note">Stand 06.11.2026, 20:45. Die Seite zeigt den letzten Sync, auch wenn Mr offline ist.</span></div>
-  <section>
-    <h2>Dein Weg zu Mr <span class="progress" id="prog"></span></h2>
-    <p class="note">Die Route Schritt für Schritt bis zu Mr. Hak ab, was du erledigt hast: das bleibt in deinem Browser gespeichert. Koordinaten funktionieren mit TomTom (<span style="font-family:var(--f-data)">/way x y</span>).</p>
-    <ol class="steps"><li class="step past" data-i="0"><label><input type="checkbox" id="s0" data-i="0"><span class="n">1</span></label>
-      <div><div class="sh"><span class="ch">Valley of Trials · Level 1</span><span class="coord">43.3, 68.5</span></div><p>Accept <q>Your Place in the World</q> from Kaltunk, turn it in to Gornek inside the Den (42.1, 68.3). Accept <q>Cutting Teeth</q> and <q>Wayward Weapons</q>. Accept <q>Vile Familiars</q> from Ruzan (42.6, 69.0).</p></div></li><li class="step past" data-i="1"><label><input type="checkbox" id="s1" data-i="1"><span class="n">2</span></label>
-      <div><div class="sh"><span class="ch">Valley of Trials · Level 1</span><span class="coord">42.7, 71.6</span></div><p>Kill 10 Mottled Boars and pick up 6 Abandoned Training Weapons on the ground.</p></div></li><li class="step past" data-i="2"><label><input type="checkbox" id="s2" data-i="2"><span class="n">3</span></label>
-      <div><div class="sh"><span class="ch">Valley of Trials · Level 2</span><span class="coord">42.9, 69.2</span></div><p>Den: accept <q>Tainted Parchment</q> and <q>Tainted Tablet</q> (if offered) from Gornek. Train at Nartok (40.6, 68.5). Turn in Cutting Teeth, accept <q>Sting of the Scorpid</q>. Turn in Tainted Parchment at Nartok, Wayward Weapons at Kzan (40.5, 68.0). Accept <q>Galgar's Cactus Apple Surprise</q> from Galgar (42.7, 67.2).</p></div></li><li class="step past" data-i="3"><label><input type="checkbox" id="s3" data-i="3"><span class="n">4</span></label>
-      <div><div class="sh"><span class="ch">Valley of Trials · Level 2</span><span class="coord">40.6, 62.6</span></div><p>Kill Scorpid Workers on the way (10 tails). Accept <q>Sarkoth</q> from Hana'zua.</p></div></li><li class="step past" data-i="4"><label><input type="checkbox" id="s4" data-i="4"><span class="n">5</span></label>
-      <div><div class="sh"><span class="ch">Valley of Trials · Level 3</span><span class="coord">40.2, 62.1</span></div><p>Pick 10 Cactus Apples. Kill 6 Vile Familiars (Warlock version). Kill Sarkoth (level 4, pull alone with the Imp tanking), turn in at Hana'zua, accept the follow-up. Turn in the apples at Galgar and pick <b>Wild Harvest</b> (teaches Herbalism; you learn Mining in Razor Hill).</p></div></li><li class="step past" data-i="5"><label><input type="checkbox" id="s5" data-i="5"><span class="n">6</span></label>
-      <div><div class="sh"><span class="ch">Valley of Trials · Level 4</span><span class="coord">40.6, 68.5</span></div><p>Train at Nartok (level 4: 3 new spells).</p></div></li><li class="step past" data-i="6"><label><input type="checkbox" id="s6" data-i="6"><span class="n">7</span></label>
-      <div><div class="sh"><span class="ch">Valley of Trials · Level 4</span><span class="coord">42.1, 68.3</span></div><p>Den: turn in Sting of the Scorpid and Sarkoth at Gornek. Turn in Vile Familiars at Ruzan, accept the next one, turn it in at Zureetha (42.9, 69.2): you get <b>Summon Imp</b>. Accept <q>Burning Blade Medallion</q>. Vendor greys at Hraug.</p></div></li><li class="step past" data-i="7"><label><input type="checkbox" id="s7" data-i="7"><span class="n">8</span></label>
-      <div><div class="sh"><span class="ch">Valley of Trials · Level 4</span><span class="coord">45.0, 69.1</span></div><p>Wake 5 Lazy Peons with the blackjack (<q>Lazy Peons</q>), turn in at Foreman Thazz'ril (44.6, 68.7), accept <q>Thazz'ril's Pick</q>.</p></div></li><li class="step past" data-i="8"><label><input type="checkbox" id="s8" data-i="8"><span class="n">9</span></label>
-      <div><div class="sh"><span class="ch">Valley of Trials · Level 5</span><span class="coord">43.7, 53.8</span></div><p>Burning Blade Coven cave (entrance 45, 56): take Thazz'ril's Pick at the waterfall (straight, then right, follow the stream). Kill Yarrog Baneshadow on the ledge above the pool (42.7, 53.0) for the Medallion.</p></div></li><li class="step past" data-i="9"><label><input type="checkbox" id="s9" data-i="9"><span class="n">10</span></label>
-      <div><div class="sh"><span class="ch">Valley of Trials · Level 5</span><span class="coord">42.4, 68.6</span></div><p>Den: turn in the Medallion at Zureetha, accept <q>Report to Sen'jin Village</q>. Read the Lost Journal next to her: <q>The Adventurer</q> (new in Forever). Train, buy Grimoire of Blood Pact at Hraug. Turn in Thazz'ril's Pick.</p></div></li><li class="step past" data-i="10"><label><input type="checkbox" id="s10" data-i="10"><span class="n">11</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 5</span><span class="coord">52.1, 68.3</span></div><p>Leave the valley. Accept <q>A Peon's Burden</q> from Ukor on the road.</p></div></li><li class="step past" data-i="11"><label><input type="checkbox" id="s11" data-i="11"><span class="n">12</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 5</span><span class="coord">56.0, 74.5</span></div><p>Sen'jin Village: accept <q>Practical Prey</q> and <q>Legging It</q> (Vel'rin Fang), <q>A Solvent Spirit</q> and <q>Forgotten Loa Idols</q> (Master Vornal), turn in Report to Sen'jin at Master Gadrin, accept <q>Minshina's Skull</q>, <q>Zalazane</q>, <q>Report to Orgnil</q>, and <q>Bloodtalon Matriarch</q> from Xar'Ti. <q>A Pain in the Neck</q> (Pa'zula) is optional.</p></div></li><li class="step past" data-i="12"><label><input type="checkbox" id="s12" data-i="12"><span class="n">13</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 6</span><span class="coord">52.4, 67.2</span></div><p>On the way north: kill 6 Ridgeshade Creepers and 6 Lurkers (Legging It).</p></div></li><li class="step past" data-i="13"><label><input type="checkbox" id="s13" data-i="13"><span class="n">14</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 6</span><span class="coord">52.0, 47.3</span></div><p>Brakk's campfire: turn in The Adventurer, accept <q>The Great Outdoors</q>. Type <span class=mono>/sit</span> until Boosted Rest appears (about a minute), turn in, accept <q>Camping 101: Cooking</q>.</p></div></li><li class="step past" data-i="14"><label><input type="checkbox" id="s14" data-i="14"><span class="n">15</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 6</span><span class="coord">52.0, 43.5</span></div><p>Razor Hill: accept <q>For Honor</q> (Turroc), turn in Report to Orgnil, accept <q>Vanquish the Betrayers</q> at Gar'Thok, turn in Legging It, accept <q>Break a Few Eggs</q> (Cook Torka 51.1, 42.5).</p></div></li><li class="step past" data-i="15"><label><input type="checkbox" id="s15" data-i="15"><span class="n">16</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 7</span><span class="coord">51.8, 40.8</span></div><p><b>Learn Mining at Krunn</b> and take <q>Camping 101: Mining</q>. Buy a Mining Pick at the general goods vendor. Herbalism you already have from Galgar's Wild Harvest. From now on, pick every node you pass.</p></div></li><li class="step past" data-i="16"><label><input type="checkbox" id="s16" data-i="16"><span class="n">17</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 7</span><span class="coord">51.5, 41.6</span></div><p>Learn Cooking at Cook Torka and finish Camping 101: Cooking. Accept <q>This Fruit Could Bite Back</q>. Turn in A Peon's Burden at Innkeeper Grosk and <b>set your hearth to Razor Hill</b>. Accept <q>Carry Your Weight</q> (Furl Scornbrow, top of the watchtower 49.9, 40.4).</p></div></li><li class="step past" data-i="17"><label><input type="checkbox" id="s17" data-i="17"><span class="n">18</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 7</span><span class="coord">49.5, 47.7</span></div><p>Quilboar huts west of town: 8 Prickly Pear Fruit. Turn in at Cook Torka.</p></div></li><li class="step past" data-i="18"><label><input type="checkbox" id="s18" data-i="18"><span class="n">19</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 8</span><span class="coord">56.6, 53.0</span></div><p>Tiragarde Keep: kill 10 Sailors and 8 Marines, take the Raider's Shield, Bow and Battleaxe, 8 Canvas Scraps. Upstairs: kill Lieutenant Benedict, open his chest (59.3, 57.6) with the key, read the Aged Envelope: <q>The Admiral's Orders</q>. Watch for Watch Commander Zalaphil (level 9).</p></div></li><li class="step past" data-i="19"><label><input type="checkbox" id="s19" data-i="19"><span class="n">20</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 8</span><span class="coord">52.0, 43.5</span></div><p>Razor Hill: turn in For Honor, accept <q>Dark Storms</q> (Orgnil). Turn in Vanquish and The Admiral's Orders at Gar'Thok, accept the second Admiral's Orders (keep it for Orgrimmar) and <q>From The Wreckage...</q>. Turn in Carry Your Weight. Train at Dhugru Gorelust (54.4, 41.2).</p></div></li><li class="step past" data-i="20"><label><input type="checkbox" id="s20" data-i="20"><span class="n">21</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 8</span><span class="coord">54.2, 73.3</span></div><p>Sen'jin: accept <q>Thwarting Kolkar Aggression</q> from Lar Prowltusk.</p></div></li><li class="step past" data-i="21"><label><input type="checkbox" id="s21" data-i="21"><span class="n">22</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 8</span><span class="coord">55.9, 79.3</span></div><p>Scuttle Coast: kill crawlers for 8 Crawler Mucus, makrura for 4 eyes (underwater), 3 Taillasher Eggs, 3 Gnomish Toolboxes underwater.</p></div></li><li class="step past" data-i="22"><label><input type="checkbox" id="s22" data-i="22"><span class="n">23</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 9</span><span class="coord">67.2, 70.7</span></div><p>4 Durotar Tiger Furs on the way to the Echo Isles. Bloodtalon Matriarch (level 9, 68.8, 71.8) is optional.</p></div></li><li class="step past" data-i="23"><label><input type="checkbox" id="s23" data-i="23"><span class="n">24</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 9</span><span class="coord">67.8, 81.4</span></div><p>Echo Isles: 8 Forgotten Loa Idols, 8 Voodoo Trolls and 8 Hexed Trolls, Minshina's Skull at the prisoner (67.4, 87.8). Zalazane (level 10, heals himself) only if you feel strong: interrupt with the Imp or skip.</p></div></li><li class="step past" data-i="24"><label><input type="checkbox" id="s24" data-i="24"><span class="n">25</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 10</span><span class="coord">56.0, 74.7</span></div><p>Sen'jin: turn in Minshina's Skull, Zalazane, Loa Idols, A Solvent Spirit, Practical Prey and the Matriarch.</p></div></li><li class="step past" data-i="25"><label><input type="checkbox" id="s25" data-i="25"><span class="n">26</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 10</span><span class="coord">46.3, 78.6</span></div><p>Kolkar Crag: accept <q>Lost in the Shadows</q> (Pal'juh, new in Forever), escort her out. Click the three Attack Plans for Thwarting Kolkar Aggression. Turn both in at Sen'jin.</p></div></li><li class="step past" data-i="26"><label><input type="checkbox" id="s26" data-i="26"><span class="n">27</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 10</span><span class="coord">52.2, 43.2</span></div><p>Hearth to Razor Hill. Accept <q>A Missing Hand</q> (Orgnil), turn in From The Wreckage, accept <q>Encroachment</q>, turn in Break a Few Eggs.</p></div></li><li class="step past" data-i="27"><label><input type="checkbox" id="s27" data-i="27"><span class="n">28</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 10</span><span class="coord">47.3, 49.0</span></div><p>Razormane Grounds: 4 each of Quilboar, Scout, Dustrunner, Battleguard (Encroachment). Pull one at a time. Grind here until <b>level 10</b>.</p></div></li><li class="step past" data-i="28"><label><input type="checkbox" id="s28" data-i="28"><span class="n">29</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 10</span><span class="coord">54.4, 41.2</span></div><p>Train at Dhugru (level 10: big batch). Accept <q>Conscript of the Horde</q> (Takrin, 50.8, 43.6) and <b><q>Gan'rul's Summons</q></b> from Ophek (54.4, 41.3).</p></div></li><li class="step past" data-i="29"><label><input type="checkbox" id="s29" data-i="29"><span class="n">30</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 10</span><span class="coord">46.4, 22.9</span></div><p>North: accept <q>Winds in the Desert</q> at Rezlak, 5 supply sacks (49.1, 22.6), turn in, accept <q>Securing the Lines</q>.</p></div></li><li class="step past" data-i="30"><label><input type="checkbox" id="s30" data-i="30"><span class="n">31</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 11</span><span class="coord">51.4, 20.9</span></div><p>Drygulch Ravine: 12 Dustwind Savages, 8 Storm Witches. A Dull Storm Orb drops: start <q>A Simmering Storm</q>. Turn in at Rezlak, accept <q>Stormy Potential</q>.</p></div></li><li class="step past" data-i="31"><label><input type="checkbox" id="s31" data-i="31"><span class="n">32</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 11</span><span class="coord">43.6, 24.1</span></div><p>Thunder Ridge: 5 Thunder Lizard organs. Fizzle Darkstorm (42.1, 26.7, level 12): make a Healthstone, kill his imp first. Avoid Halikor (elite). Turn in Stormy Potential at Rezlak.</p></div></li><li class="step past" data-i="32"><label><input type="checkbox" id="s32" data-i="32"><span class="n">33</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 11</span><span class="coord">58.6, 45.6</span></div><p>Heglan Shadeeye: turn in A Missing Hand, accept <q>Threat from Below</q> (new), pick up the dagger, trident and banner scrap nearby.</p></div></li><li class="step me" data-i="33"><label><input type="checkbox" id="s33" data-i="33"><span class="n">34</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 11</span><span class="coord">52.2, 43.1</span><span class="here">Mr ist hier</span></div><p>Razor Hill: train. Turn in Encroachment, Dark Storms (accept <q>Margoz</q>), Threat from Below (accept part 2).</p></div></li><li class="step " data-i="34"><label><input type="checkbox" id="s34" data-i="34"><span class="n">35</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 11</span><span class="coord">56.6, 30.5</span></div><p>Spitelash naga beach: 9 Naga Spinefins. Then Margoz (56.4, 20.0): turn in, accept <q>Skull Rock</q>.</p></div></li><li class="step " data-i="35"><label><input type="checkbox" id="s35" data-i="35"><span class="n">36</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 11</span><span class="coord">48.3, 45.3</span></div><p>Orgrimmar, Cleft of Shadow: turn in Gan'rul's Summons, accept <q>Creature of the Void</q>. If you skipped Wild Harvest: learn Herbalism at Jandi (55.4, 39.6). Staves at Hanashi (Valley of Honor, 10s) if you lack them.</p></div></li><li class="step " data-i="36"><label><input type="checkbox" id="s36" data-i="36"><span class="n">37</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 12</span><span class="coord">55.0, 9.8</span></div><p>Skull Rock: 6 Searing Collars from Burning Blade Thugs/Neophytes. Far end, right passage: Tablet of Verga (51.6, 9.8). Skip Gazz'uz (level 14 with a Voidwalker) and <q>Burning Shadows</q>.</p></div></li><li class="step " data-i="37"><label><input type="checkbox" id="s37" data-i="37"><span class="n">38</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 12</span><span class="coord">48.3, 45.3</span></div><p>Orgrimmar: turn in Creature of the Void, accept <q>The Binding</q>. Use the Glyphs at the circle, kill the Voidwalker, turn in: you get <b>Summon Voidwalker</b>. From now on the Voidwalker tanks.</p></div></li><li class="step " data-i="38"><label><input type="checkbox" id="s38" data-i="38"><span class="n">39</span></label>
-      <div><div class="sh"><span class="ch">Durotar · Level 12</span><span class="coord">56.4, 20.0</span></div><p>Margoz: turn in Skull Rock, accept <q>Neeru Fireblade</q> (keep it for Orgrimmar). Razor Hill: turn in Threat from Below. The group part with Aggor (elite) is optional.</p></div></li></ol>
-  </section>
-  <section>
-    <h2>Mr's aktuelles Questlog <span>6 offen</span></h2>
-    <h3 class="zone">Durotar</h3><article class="quest"><span class="lv yel">11</span>
-          <div><a href="https://www.wowhead.com/classic/quest=99052" target="_blank" rel="noopener">Threat from Below</a> <ul><li class="">0/1 Aggor&#x27;s Belt</li></ul></div></article><article class="quest"><span class="lv yel">12</span>
-          <div><a href="https://www.wowhead.com/classic/quest=840" target="_blank" rel="noopener">Conscript of the Horde</a> <span class="ready">fertig, wird abgegeben</span><ul><li class="ok">Follow the western road from Razor Hill to the Barrens over a bridge.
+      <header>
+        <div class="lvl">11</div>
+        <h1>Mr</h1>
+        <div class="sub">Orc Hexenmeister · Horde · gerade in Durotar</div>
+        <div class="xp" aria-label="Erfahrung 83 Prozent"><i></i></div>
+        <div class="meta"><span>7.319 / 8.800 EP (83 %)</span><span>64 Quests erledigt</span><span>Stand 06.11.2026, 20:45</span></div>
+      </header>
+      <div class="where"><span>Mr ist bei <b>Schritt 34 von 77</b> der Route (Durotar, ab Level 11), in Durotar.</span>
+        <span class="note">Stand 06.11.2026, 20:45. Die Seite zeigt den letzten Sync, auch wenn Mr offline ist.</span></div>
+      <section>
+        <h2>Dein Weg zu Mr <span class="progress" id="prog"></span></h2>
+        <p class="note">Die Route Schritt für Schritt bis zu Mr. Hak ab, was du erledigt hast: das bleibt in deinem Browser gespeichert. Koordinaten funktionieren mit TomTom (<span style="font-family:var(--f-data)">/way x y</span>).</p>
+        <ol class="steps"><li class="step past" data-i="0"><label><input type="checkbox" id="s0" data-i="0"><span class="n">1</span></label>
+          <div><div class="sh"><span class="ch">Valley of Trials · Level 1</span><span class="coord">43.3, 68.5</span></div><p>Accept <q>Your Place in the World</q> from Kaltunk, turn it in to Gornek inside the Den (42.1, 68.3). Accept <q>Cutting Teeth</q> and <q>Wayward Weapons</q>. Accept <q>Vile Familiars</q> from Ruzan (42.6, 69.0).</p></div></li><li class="step past" data-i="1"><label><input type="checkbox" id="s1" data-i="1"><span class="n">2</span></label>
+          <div><div class="sh"><span class="ch">Valley of Trials · Level 1</span><span class="coord">42.7, 71.6</span></div><p>Kill 10 Mottled Boars and pick up 6 Abandoned Training Weapons on the ground.</p></div></li><li class="step past" data-i="2"><label><input type="checkbox" id="s2" data-i="2"><span class="n">3</span></label>
+          <div><div class="sh"><span class="ch">Valley of Trials · Level 2</span><span class="coord">42.9, 69.2</span></div><p>Den: accept <q>Tainted Parchment</q> and <q>Tainted Tablet</q> (if offered) from Gornek. Train at Nartok (40.6, 68.5). Turn in Cutting Teeth, accept <q>Sting of the Scorpid</q>. Turn in Tainted Parchment at Nartok, Wayward Weapons at Kzan (40.5, 68.0). Accept <q>Galgar's Cactus Apple Surprise</q> from Galgar (42.7, 67.2).</p></div></li><li class="step past" data-i="3"><label><input type="checkbox" id="s3" data-i="3"><span class="n">4</span></label>
+          <div><div class="sh"><span class="ch">Valley of Trials · Level 2</span><span class="coord">40.6, 62.6</span></div><p>Kill Scorpid Workers on the way (10 tails). Accept <q>Sarkoth</q> from Hana'zua.</p></div></li><li class="step past" data-i="4"><label><input type="checkbox" id="s4" data-i="4"><span class="n">5</span></label>
+          <div><div class="sh"><span class="ch">Valley of Trials · Level 3</span><span class="coord">40.2, 62.1</span></div><p>Pick 10 Cactus Apples. Kill 6 Vile Familiars (Warlock version). Kill Sarkoth (level 4, pull alone with the Imp tanking), turn in at Hana'zua, accept the follow-up. Turn in the apples at Galgar and pick <b>Wild Harvest</b> (teaches Herbalism; you learn Mining in Razor Hill).</p></div></li><li class="step past" data-i="5"><label><input type="checkbox" id="s5" data-i="5"><span class="n">6</span></label>
+          <div><div class="sh"><span class="ch">Valley of Trials · Level 4</span><span class="coord">40.6, 68.5</span></div><p>Train at Nartok (level 4: 3 new spells).</p></div></li><li class="step past" data-i="6"><label><input type="checkbox" id="s6" data-i="6"><span class="n">7</span></label>
+          <div><div class="sh"><span class="ch">Valley of Trials · Level 4</span><span class="coord">42.1, 68.3</span></div><p>Den: turn in Sting of the Scorpid and Sarkoth at Gornek. Turn in Vile Familiars at Ruzan, accept the next one, turn it in at Zureetha (42.9, 69.2): you get <b>Summon Imp</b>. Accept <q>Burning Blade Medallion</q>. Vendor greys at Hraug.</p></div></li><li class="step past" data-i="7"><label><input type="checkbox" id="s7" data-i="7"><span class="n">8</span></label>
+          <div><div class="sh"><span class="ch">Valley of Trials · Level 4</span><span class="coord">45.0, 69.1</span></div><p>Wake 5 Lazy Peons with the blackjack (<q>Lazy Peons</q>), turn in at Foreman Thazz'ril (44.6, 68.7), accept <q>Thazz'ril's Pick</q>.</p></div></li><li class="step past" data-i="8"><label><input type="checkbox" id="s8" data-i="8"><span class="n">9</span></label>
+          <div><div class="sh"><span class="ch">Valley of Trials · Level 5</span><span class="coord">43.7, 53.8</span></div><p>Burning Blade Coven cave (entrance 45, 56): take Thazz'ril's Pick at the waterfall (straight, then right, follow the stream). Kill Yarrog Baneshadow on the ledge above the pool (42.7, 53.0) for the Medallion.</p></div></li><li class="step past" data-i="9"><label><input type="checkbox" id="s9" data-i="9"><span class="n">10</span></label>
+          <div><div class="sh"><span class="ch">Valley of Trials · Level 5</span><span class="coord">42.4, 68.6</span></div><p>Den: turn in the Medallion at Zureetha, accept <q>Report to Sen'jin Village</q>. Read the Lost Journal next to her: <q>The Adventurer</q> (new in Forever). Train, buy Grimoire of Blood Pact at Hraug. Turn in Thazz'ril's Pick.</p></div></li><li class="step past" data-i="10"><label><input type="checkbox" id="s10" data-i="10"><span class="n">11</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 5</span><span class="coord">52.1, 68.3</span></div><p>Leave the valley. Accept <q>A Peon's Burden</q> from Ukor on the road.</p></div></li><li class="step past" data-i="11"><label><input type="checkbox" id="s11" data-i="11"><span class="n">12</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 5</span><span class="coord">56.0, 74.5</span></div><p>Sen'jin Village: accept <q>Practical Prey</q> and <q>Legging It</q> (Vel'rin Fang), <q>A Solvent Spirit</q> and <q>Forgotten Loa Idols</q> (Master Vornal), turn in Report to Sen'jin at Master Gadrin, accept <q>Minshina's Skull</q>, <q>Zalazane</q>, <q>Report to Orgnil</q>, and <q>Bloodtalon Matriarch</q> from Xar'Ti. <q>A Pain in the Neck</q> (Pa'zula) is optional.</p></div></li><li class="step past" data-i="12"><label><input type="checkbox" id="s12" data-i="12"><span class="n">13</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 6</span><span class="coord">52.4, 67.2</span></div><p>On the way north: kill 6 Ridgeshade Creepers and 6 Lurkers (Legging It).</p></div></li><li class="step past" data-i="13"><label><input type="checkbox" id="s13" data-i="13"><span class="n">14</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 6</span><span class="coord">52.0, 47.3</span></div><p>Brakk's campfire: turn in The Adventurer, accept <q>The Great Outdoors</q>. Type <span class=mono>/sit</span> until Boosted Rest appears (about a minute), turn in, accept <q>Camping 101: Cooking</q>.</p></div></li><li class="step past" data-i="14"><label><input type="checkbox" id="s14" data-i="14"><span class="n">15</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 6</span><span class="coord">52.0, 43.5</span></div><p>Razor Hill: accept <q>For Honor</q> (Turroc), turn in Report to Orgnil, accept <q>Vanquish the Betrayers</q> at Gar'Thok, turn in Legging It, accept <q>Break a Few Eggs</q> (Cook Torka 51.1, 42.5).</p></div></li><li class="step past" data-i="15"><label><input type="checkbox" id="s15" data-i="15"><span class="n">16</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 7</span><span class="coord">51.8, 40.8</span></div><p><b>Learn Mining at Krunn</b> and take <q>Camping 101: Mining</q>. Buy a Mining Pick at the general goods vendor. Herbalism you already have from Galgar's Wild Harvest. From now on, pick every node you pass.</p></div></li><li class="step past" data-i="16"><label><input type="checkbox" id="s16" data-i="16"><span class="n">17</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 7</span><span class="coord">51.5, 41.6</span></div><p>Learn Cooking at Cook Torka and finish Camping 101: Cooking. Accept <q>This Fruit Could Bite Back</q>. Turn in A Peon's Burden at Innkeeper Grosk and <b>set your hearth to Razor Hill</b>. Accept <q>Carry Your Weight</q> (Furl Scornbrow, top of the watchtower 49.9, 40.4).</p></div></li><li class="step past" data-i="17"><label><input type="checkbox" id="s17" data-i="17"><span class="n">18</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 7</span><span class="coord">49.5, 47.7</span></div><p>Quilboar huts west of town: 8 Prickly Pear Fruit. Turn in at Cook Torka.</p></div></li><li class="step past" data-i="18"><label><input type="checkbox" id="s18" data-i="18"><span class="n">19</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 8</span><span class="coord">56.6, 53.0</span></div><p>Tiragarde Keep: kill 10 Sailors and 8 Marines, take the Raider's Shield, Bow and Battleaxe, 8 Canvas Scraps. Upstairs: kill Lieutenant Benedict, open his chest (59.3, 57.6) with the key, read the Aged Envelope: <q>The Admiral's Orders</q>. Watch for Watch Commander Zalaphil (level 9).</p></div></li><li class="step past" data-i="19"><label><input type="checkbox" id="s19" data-i="19"><span class="n">20</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 8</span><span class="coord">52.0, 43.5</span></div><p>Razor Hill: turn in For Honor, accept <q>Dark Storms</q> (Orgnil). Turn in Vanquish and The Admiral's Orders at Gar'Thok, accept the second Admiral's Orders (keep it for Orgrimmar) and <q>From The Wreckage...</q>. Turn in Carry Your Weight. Train at Dhugru Gorelust (54.4, 41.2).</p></div></li><li class="step past" data-i="20"><label><input type="checkbox" id="s20" data-i="20"><span class="n">21</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 8</span><span class="coord">54.2, 73.3</span></div><p>Sen'jin: accept <q>Thwarting Kolkar Aggression</q> from Lar Prowltusk.</p></div></li><li class="step past" data-i="21"><label><input type="checkbox" id="s21" data-i="21"><span class="n">22</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 8</span><span class="coord">55.9, 79.3</span></div><p>Scuttle Coast: kill crawlers for 8 Crawler Mucus, makrura for 4 eyes (underwater), 3 Taillasher Eggs, 3 Gnomish Toolboxes underwater.</p></div></li><li class="step past" data-i="22"><label><input type="checkbox" id="s22" data-i="22"><span class="n">23</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 9</span><span class="coord">67.2, 70.7</span></div><p>4 Durotar Tiger Furs on the way to the Echo Isles. Bloodtalon Matriarch (level 9, 68.8, 71.8) is optional.</p></div></li><li class="step past" data-i="23"><label><input type="checkbox" id="s23" data-i="23"><span class="n">24</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 9</span><span class="coord">67.8, 81.4</span></div><p>Echo Isles: 8 Forgotten Loa Idols, 8 Voodoo Trolls and 8 Hexed Trolls, Minshina's Skull at the prisoner (67.4, 87.8). Zalazane (level 10, heals himself) only if you feel strong: interrupt with the Imp or skip.</p></div></li><li class="step past" data-i="24"><label><input type="checkbox" id="s24" data-i="24"><span class="n">25</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 10</span><span class="coord">56.0, 74.7</span></div><p>Sen'jin: turn in Minshina's Skull, Zalazane, Loa Idols, A Solvent Spirit, Practical Prey and the Matriarch.</p></div></li><li class="step past" data-i="25"><label><input type="checkbox" id="s25" data-i="25"><span class="n">26</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 10</span><span class="coord">46.3, 78.6</span></div><p>Kolkar Crag: accept <q>Lost in the Shadows</q> (Pal'juh, new in Forever), escort her out. Click the three Attack Plans for Thwarting Kolkar Aggression. Turn both in at Sen'jin.</p></div></li><li class="step past" data-i="26"><label><input type="checkbox" id="s26" data-i="26"><span class="n">27</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 10</span><span class="coord">52.2, 43.2</span></div><p>Hearth to Razor Hill. Accept <q>A Missing Hand</q> (Orgnil), turn in From The Wreckage, accept <q>Encroachment</q>, turn in Break a Few Eggs.</p></div></li><li class="step past" data-i="27"><label><input type="checkbox" id="s27" data-i="27"><span class="n">28</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 10</span><span class="coord">47.3, 49.0</span></div><p>Razormane Grounds: 4 each of Quilboar, Scout, Dustrunner, Battleguard (Encroachment). Pull one at a time. Grind here until <b>level 10</b>.</p></div></li><li class="step past" data-i="28"><label><input type="checkbox" id="s28" data-i="28"><span class="n">29</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 10</span><span class="coord">54.4, 41.2</span></div><p>Train at Dhugru (level 10: big batch). Accept <q>Conscript of the Horde</q> (Takrin, 50.8, 43.6) and <b><q>Gan'rul's Summons</q></b> from Ophek (54.4, 41.3).</p></div></li><li class="step past" data-i="29"><label><input type="checkbox" id="s29" data-i="29"><span class="n">30</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 10</span><span class="coord">46.4, 22.9</span></div><p>North: accept <q>Winds in the Desert</q> at Rezlak, 5 supply sacks (49.1, 22.6), turn in, accept <q>Securing the Lines</q>.</p></div></li><li class="step past" data-i="30"><label><input type="checkbox" id="s30" data-i="30"><span class="n">31</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 11</span><span class="coord">51.4, 20.9</span></div><p>Drygulch Ravine: 12 Dustwind Savages, 8 Storm Witches. A Dull Storm Orb drops: start <q>A Simmering Storm</q>. Turn in at Rezlak, accept <q>Stormy Potential</q>.</p></div></li><li class="step past" data-i="31"><label><input type="checkbox" id="s31" data-i="31"><span class="n">32</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 11</span><span class="coord">43.6, 24.1</span></div><p>Thunder Ridge: 5 Thunder Lizard organs. Fizzle Darkstorm (42.1, 26.7, level 12): make a Healthstone, kill his imp first. Avoid Halikor (elite). Turn in Stormy Potential at Rezlak.</p></div></li><li class="step past" data-i="32"><label><input type="checkbox" id="s32" data-i="32"><span class="n">33</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 11</span><span class="coord">58.6, 45.6</span></div><p>Heglan Shadeeye: turn in A Missing Hand, accept <q>Threat from Below</q> (new), pick up the dagger, trident and banner scrap nearby.</p></div></li><li class="step me" data-i="33"><label><input type="checkbox" id="s33" data-i="33"><span class="n">34</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 11</span><span class="coord">52.2, 43.1</span><span class="here">Mr ist hier</span></div><p>Razor Hill: train. Turn in Encroachment, Dark Storms (accept <q>Margoz</q>), Threat from Below (accept part 2).</p></div></li><li class="step " data-i="34"><label><input type="checkbox" id="s34" data-i="34"><span class="n">35</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 11</span><span class="coord">56.6, 30.5</span></div><p>Spitelash naga beach: 9 Naga Spinefins. Then Margoz (56.4, 20.0): turn in, accept <q>Skull Rock</q>.</p></div></li><li class="step " data-i="35"><label><input type="checkbox" id="s35" data-i="35"><span class="n">36</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 11</span><span class="coord">48.3, 45.3</span></div><p>Orgrimmar, Cleft of Shadow: turn in Gan'rul's Summons, accept <q>Creature of the Void</q>. If you skipped Wild Harvest: learn Herbalism at Jandi (55.4, 39.6). Staves at Hanashi (Valley of Honor, 10s) if you lack them.</p></div></li><li class="step " data-i="36"><label><input type="checkbox" id="s36" data-i="36"><span class="n">37</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 12</span><span class="coord">55.0, 9.8</span></div><p>Skull Rock: 6 Searing Collars from Burning Blade Thugs/Neophytes. Far end, right passage: Tablet of Verga (51.6, 9.8). Skip Gazz'uz (level 14 with a Voidwalker) and <q>Burning Shadows</q>.</p></div></li><li class="step " data-i="37"><label><input type="checkbox" id="s37" data-i="37"><span class="n">38</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 12</span><span class="coord">48.3, 45.3</span></div><p>Orgrimmar: turn in Creature of the Void, accept <q>The Binding</q>. Use the Glyphs at the circle, kill the Voidwalker, turn in: you get <b>Summon Voidwalker</b>. From now on the Voidwalker tanks.</p></div></li><li class="step " data-i="38"><label><input type="checkbox" id="s38" data-i="38"><span class="n">39</span></label>
+          <div><div class="sh"><span class="ch">Durotar · Level 12</span><span class="coord">56.4, 20.0</span></div><p>Margoz: turn in Skull Rock, accept <q>Neeru Fireblade</q> (keep it for Orgrimmar). Razor Hill: turn in Threat from Below. The group part with Aggor (elite) is optional.</p></div></li></ol>
+      </section>
+      <section>
+        <h2>Mr's aktuelles Questlog <span>6 offen</span></h2>
+        <h3 class="zone">Durotar</h3><article class="quest"><span class="lv yel">11</span>
+              <div><a href="https://www.wowhead.com/classic/quest=99052" target="_blank" rel="noopener">Threat from Below</a> <ul><li class="">0/1 Aggor&#x27;s Belt</li></ul></div></article><article class="quest"><span class="lv yel">12</span>
+              <div><a href="https://www.wowhead.com/classic/quest=840" target="_blank" rel="noopener">Conscript of the Horde</a> <span class="ready">fertig, wird abgegeben</span><ul><li class="ok">Follow the western road from Razor Hill to the Barrens over a bridge.
 
 Stop at the orc outpost across the bridge.
 
 Give Kargal Battlescar at the Barrens outpost your recruitment letter.</li></ul></div></article><article class="quest"><span class="lv yel">12</span>
-          <div><a href="https://www.wowhead.com/classic/quest=828" target="_blank" rel="noopener">Margoz</a> <span class="ready">fertig, wird abgegeben</span><ul></ul></div></article><h3 class="zone">Ragefire Chasm</h3><article class="quest"><span class="lv red">16</span>
-          <div><a href="https://www.wowhead.com/classic/quest=5728" target="_blank" rel="noopener">Hidden Enemies</a> <ul><li class="">0/1 Bazzalan slain</li><li class="">0/1 Jergosh the Invoker slain</li></ul></div></article><h3 class="zone">Camping</h3><article class="quest"><span class="lv grn">6</span>
-          <div><a href="https://www.wowhead.com/classic/quest=97905" target="_blank" rel="noopener">Camping 101: Herbalism</a> <ul><li class="">Raise your herbalism skill to 20</li></ul></div></article><article class="quest"><span class="lv grn">6</span>
-          <div><a href="https://www.wowhead.com/classic/quest=97907" target="_blank" rel="noopener">Camping 101: Mining</a> <ul><li class="">Raise your mining skill to 20</li></ul></div></article>
-    <p class="note">Die Zahl vor jeder Quest ist ihr Level, farbig wie im Spiel: rot ist zu schwer, grün leicht.</p>
-  </section>
-  <section>
-    <h2>Von Mr abgeschlossen <span>0</span></h2>
-    <p class="empty">Die Liste erscheint nach dem nächsten Sync mit dem neuen Addon.</p>
-    <p class="note">Neueste zuerst, soweit die Abgabezeit bekannt ist. Jeder Name verlinkt auf Wowhead mit Karte und Questgeber.</p>
-  </section>
-</div>
-<script>
-(() => {
-  const KEY = "qt-done", total = 39, me = 33;
-  let done = {};
-  try { done = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch {}
-  const paint = () => {
-    let n = 0;
-    document.querySelectorAll(".step").forEach(li => {
-      const i = li.dataset.i, on = !!done[i]; if (on) n++;
-      li.querySelector("input").checked = on; li.classList.toggle("mine-done", on);
-    });
-    const upto = [...Array(me + 1).keys()].filter(i => done[i]).length;
-    document.getElementById("prog").textContent = `${upto} von ${me + 1} Schritten bis Mr erledigt`;
-  };
-  document.querySelector(".steps").addEventListener("change", ev => {
-    const i = ev.target.dataset.i; if (i == null) return;
-    if (ev.target.checked) done[i] = 1; else delete done[i];
-    try { localStorage.setItem(KEY, JSON.stringify(done)); } catch {}
-    paint();
-  });
-  paint();
-})();
-</script>
+              <div><a href="https://www.wowhead.com/classic/quest=828" target="_blank" rel="noopener">Margoz</a> <span class="ready">fertig, wird abgegeben</span><ul></ul></div></article><h3 class="zone">Ragefire Chasm</h3><article class="quest"><span class="lv red">16</span>
+              <div><a href="https://www.wowhead.com/classic/quest=5728" target="_blank" rel="noopener">Hidden Enemies</a> <ul><li class="">0/1 Bazzalan slain</li><li class="">0/1 Jergosh the Invoker slain</li></ul></div></article><h3 class="zone">Camping</h3><article class="quest"><span class="lv grn">6</span>
+              <div><a href="https://www.wowhead.com/classic/quest=97905" target="_blank" rel="noopener">Camping 101: Herbalism</a> <ul><li class="">Raise your herbalism skill to 20</li></ul></div></article><article class="quest"><span class="lv grn">6</span>
+              <div><a href="https://www.wowhead.com/classic/quest=97907" target="_blank" rel="noopener">Camping 101: Mining</a> <ul><li class="">Raise your mining skill to 20</li></ul></div></article>
+        <p class="note">Die Zahl vor jeder Quest ist ihr Level, farbig wie im Spiel: rot ist zu schwer, grün leicht.</p>
+      </section>
+      <section>
+        <h2>Von Mr abgeschlossen <span>0</span></h2>
+        <p class="empty">Die Liste erscheint nach dem nächsten Sync mit dem neuen Addon.</p>
+        <p class="note">Neueste zuerst, soweit die Abgabezeit bekannt ist. Jeder Name verlinkt auf Wowhead mit Karte und Questgeber.</p>
+      </section>
+    </div>
+    <script>
+    (() => {
+      const KEY = "qt-done", total = 39, me = 33;
+      let done = {};
+      try { done = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch {}
+      const paint = () => {
+        let n = 0;
+        document.querySelectorAll(".step").forEach(li => {
+          const i = li.dataset.i, on = !!done[i]; if (on) n++;
+          li.querySelector("input").checked = on; li.classList.toggle("mine-done", on);
+        });
+        const upto = [...Array(me + 1).keys()].filter(i => done[i]).length;
+        document.getElementById("prog").textContent = `${upto} von ${me + 1} Schritten bis Mr erledigt`;
+      };
+      document.querySelector(".steps").addEventListener("change", ev => {
+        const i = ev.target.dataset.i; if (i == null) return;
+        if (ev.target.checked) done[i] = 1; else delete done[i];
+        try { localStorage.setItem(KEY, JSON.stringify(done)); } catch {}
+        paint();
+      });
+      paint();
+    })();
+    </script>
+    </body>
+</html>
