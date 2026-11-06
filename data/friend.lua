@@ -66,6 +66,14 @@ QuestShareDB = {
 ["title"] = "From The Wreckage....",
 },
 {
+["id"] = 830,
+["title"] = "The Admiral's Orders",
+},
+{
+["id"] = 831,
+["title"] = "The Admiral's Orders",
+},
+{
 ["id"] = 834,
 ["title"] = "Winds in the Desert",
 },
@@ -322,9 +330,21 @@ QuestShareDB = {
 ["title"] = "Stormy Potential",
 ["level"] = 10,
 },
+{
+["id"] = 830,
+["t"] = 1794008405,
+["title"] = "The Admiral's Orders",
+["level"] = 11,
 },
-["t"] = 1794006550,
-["xp"] = 7153,
+{
+["id"] = 831,
+["t"] = 1794009102,
+["title"] = "The Admiral's Orders",
+["level"] = 11,
+},
+},
+["t"] = 1794009158,
+["xp"] = 1278,
 ["quests"] = {
 {
 ["title"] = "Break a Few Eggs",
@@ -504,12 +524,12 @@ QuestShareDB = {
 ["complete"] = true,
 },
 },
-["xpMax"] = 7600,
+["xpMax"] = 8800,
 ["race"] = "Orc",
 ["name"] = "Tanzverbot",
 ["faction"] = "Horde",
-["questsDone"] = 68,
-["level"] = 10,
+["questsDone"] = 70,
+["level"] = 11,
 ["schema"] = 1,
 ["class"] = "HUNTER",
 }
