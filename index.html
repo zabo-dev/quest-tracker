@@ -75,7 +75,9 @@ tr.band th { text-align: left; font-size: 12px; font-weight: 600; color: var(--i
   try { D = await (await fetch("data/state.json?t=" + Date.now(), { cache: "no-store" })).json(); }
   catch { app.innerHTML = '<p class="empty">Noch keine Daten. Sobald der erste Sync durch ist, erscheint hier der Stand.</p>'; return; }
 
-  const M = esc(D.names?.me || "Ich"), F = esc(D.names?.friend || "Kumpel");
+  // Anzeigenamen fest hier, unabhängig von den Namen in state.json
+  const NAMES = { me: "Zaki", friend: "Henry" };
+  const M = esc(NAMES.me || D.names?.me || "Ich"), F = esc(NAMES.friend || D.names?.friend || "Kumpel");
   const me = D.me || {}, fr = D.friend, L = me.level || 0, Q = D.quests || [];
   const pct = me.xpMax ? Math.round(me.xp / me.xpMax * 100) : 0;
   const lvcls = lv => { const d = (lv || L) - L; return d >= 5 ? "red" : d >= 3 ? "org" : d >= -2 ? "yel" : d >= -8 ? "grn" : "gry"; };
