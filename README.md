@@ -11,3 +11,8 @@ Seite: https://zabo-dev.github.io/quest-tracker/
 
 Updates: `git pull`, danach die Addon-Ordner neu kopieren.
 Details: `kit/LIESMICH.txt`
+
+## Seite bearbeiten
+`index.html` gehört euch: Design und Aufbau frei ändern, der Server überschreibt sie nicht mehr.
+Der Server schreibt nur `data/state.json` (Aufbau steht oben in `index.html` als Kommentar).
+Vor dem Bearbeiten `git pull`, weil der Server laufend `data/` aktualisiert.
