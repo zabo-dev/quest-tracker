@@ -60,6 +60,7 @@ tr.band th { text-align: left; font-size: 12px; font-weight: 600; color: var(--i
 .lv.red { color: var(--red); } .lv.org { color: var(--orange); } .lv.yel { color: var(--amber); } .lv.grn { color: var(--green); } .lv.gry { color: var(--gray); }
 .st { font-weight: 700; font-size: 15px; } .st.done { color: var(--green); } .st.open { color: var(--blue); } .st.none { color: var(--ink3); font-weight: 400; }
 .cls { font-size: 11px; color: var(--ink3); border: 1px solid var(--line); border-radius: 980px; padding: 0 7px; white-space: nowrap; }
+.hint { font-size: 13px; color: var(--ink3); margin: -6px 2px 0; }
 .legend { font-size: 12px; color: var(--ink3); margin-top: 10px; display: flex; gap: 14px; flex-wrap: wrap; }
 .empty { padding: 18px 6px; color: var(--ink2); }
 @media (max-width: 640px) { .nums { grid-template-columns: repeat(2, minmax(0, 1fr)); } thead th.c { width: 22%; } }
@@ -126,11 +127,12 @@ tr.band th { text-align: left; font-size: 12px; font-weight: 600; color: var(--i
       <div class="sub">${sub}</div>
     </header>
     <div class="nums">
-      <div class="num"><b>${fr ? heMissing : "–"}</b><small>${F} fehlen bis ${M}</small></div>
-      <div class="num"><b>${fr ? togN : "–"}</b><small>zusammen machbar</small></div>
-      <div class="num"><b>${fr ? both : "–"}</b><small>beide offen</small></div>
-      <div class="num"><b>${fr ? iMissing : "–"}</b><small>${M} fehlen von ${F}</small></div>
+      <div class="num"><b>${fr ? heMissing : "–"}</b><small>Quests fehlen ${F} bis zu ${M}</small></div>
+      <div class="num"><b>${fr ? togN : "–"}</b><small>jetzt zusammen machbar</small></div>
+      <div class="num"><b>${fr ? both : "–"}</b><small>haben beide im Questlog</small></div>
+      <div class="num"><b>${fr ? iMissing : "–"}</b><small>Quests fehlen ${M} von ${F}</small></div>
     </div>
+    <p class="hint">„Zusammen machbar“: einer hat die Quest im Log, der andere hat sie noch nicht abgegeben und kann sie annehmen. „Im Questlog“: beide haben sie schon angenommen. Questketten und doppelte Quests zählen als eine, Klassenquests gar nicht.</p>
     <div class="card now"><span class="k">${M} gerade</span><p>${routeText}</p>
       <small>Level ${L} · ${pct} % · ${esc(me.zone)} · Schritt ${r.step || "?"} von ${r.steps || "?"}${r.coords ? ` · <span class="mono">${esc(r.coords)}</span>` : ""}</small></div>
     <div class="card">
