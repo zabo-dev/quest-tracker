@@ -59,6 +59,12 @@ tr.band th { text-align: left; font-size: 12px; font-weight: 600; color: var(--i
 .lv { font: 600 13px var(--f); font-variant-numeric: tabular-nums; min-width: 20px; }
 .lv.red { color: var(--red); } .lv.org { color: var(--orange); } .lv.yel { color: var(--amber); } .lv.grn { color: var(--green); } .lv.gry { color: var(--gray); }
 .st { font-weight: 700; font-size: 15px; } .st.done { color: var(--green); } .st.open { color: var(--blue); } .st.none { color: var(--ink3); font-weight: 400; }
+.ring { display: inline-flex; align-items: center; gap: 5px; font: 600 13px var(--f); font-variant-numeric: tabular-nums; }
+.ring svg { width: 18px; height: 18px; }
+tr.chain { cursor: pointer; } tr.chain:hover td { background: #fafafc; }
+.tg { border: 0; background: none; padding: 0 2px; font: 600 16px var(--f); color: var(--ink3); cursor: pointer; transition: transform .15s; line-height: 1; }
+.tg[aria-expanded="true"] { transform: rotate(90deg); }
+tr.part td { background: #fafafc; font-size: 14px; } tr.part td:first-child { padding-left: 34px; }
 .cls { font-size: 11px; color: var(--ink3); border: 1px solid var(--line); border-radius: 980px; padding: 0 7px; white-space: nowrap; }
 .hint { font-size: 13px; color: var(--ink3); margin: -6px 2px 0; }
 .legend { font-size: 12px; color: var(--ink3); margin-top: 10px; display: flex; gap: 14px; flex-wrap: wrap; }
@@ -85,10 +91,11 @@ tr.band th { text-align: left; font-size: 12px; font-weight: 600; color: var(--i
   const lvcls = lv => { const d = (lv || L) - L; return d >= 5 ? "red" : d >= 3 ? "org" : d >= -2 ? "yel" : d >= -8 ? "grn" : "gry"; };
 
   // class quests (q.classOnly = "Hunter", "Warlock", ...) only one class can do: shown, never counted as missing
-  const heMissing = Q.filter(q => q.me === "done" && q.friend !== "done" && !q.classOnly).length;
-  const iMissing = Q.filter(q => q.friend === "done" && q.me !== "done" && !q.classOnly).length;
+  // one row per quest chain; a chain counts once. meDone/meTotal = parts done of the parts that player's class can do
+  const heMissing = Q.filter(q => !q.classOnly && (q.meTotal ? q.meDone > q.friendDone : q.me === "done" && q.friend !== "done")).length;
+  const iMissing = Q.filter(q => !q.classOnly && (q.friendTotal ? q.friendDone > q.meDone : q.friend === "done" && q.me !== "done")).length;
   const both = Q.filter(q => q.me === "open" && q.friend === "open").length;
-  const tog = q => !q.classOnly && ((q.me === "open" && q.friend === "open") || (q.me === "open" && !q.friend) || (q.friend === "open" && !q.me));
+  const tog = q => !q.classOnly && ((q.me === "open" && q.friend !== "done") || (q.friend === "open" && q.me !== "done"));
   const CLS = { Hunter: "Jäger", Warlock: "Hexenmeister", Warrior: "Krieger", Shaman: "Schamane", Rogue: "Schurke", Mage: "Magier", Priest: "Priester", Druid: "Druide" };
   const togN = Q.filter(tog).length;
 
@@ -105,17 +112,40 @@ tr.band th { text-align: left; font-size: 12px; font-weight: 600; color: var(--i
     sub = `Sobald ${F} das Repo eingerichtet hat und <span class="mono">/wp sync</span> macht, stehen hier beide Questbücher nebeneinander.`;
   }
 
+  const ring = (d, t) => {
+    const r = 7, c = 2 * Math.PI * r, f = t ? d / t : 0, col = d >= t ? "var(--green)" : d ? "var(--blue)" : "var(--line)";
+    return `<span class="ring" title="${d} von ${t} Teilen"><svg viewBox="0 0 18 18"><circle cx="9" cy="9" r="${r}" fill="none" stroke="var(--line)" stroke-width="2.5"/>`
+      + `<circle cx="9" cy="9" r="${r}" fill="none" stroke="${col}" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="${(c * f).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 9 9)"/></svg>${d}/${t}</span>`;
+  };
+  const chainCell = (q, who) => {
+    const d = q[who + "Done"], t = q[who + "Total"], p = q[who + "Progress"];
+    if (!t) return '<span class="st none" title="Klassenquest">·</span>';
+    return ring(d, t) + (p ? `<small>${esc(p)}</small>` : "");
+  };
   const cell = (s, p, q) => !s && q && q.classOnly ? '<span class="st none" title="Klassenquest">·</span>' : s === "done" ? '<span class="st done" title="abgegeben">✓</span>'
     : s === "open" ? `<span class="st open" title="im Questlog">●</span><small>${esc(p)}</small>` : '<span class="st none" title="fehlt">–</span>';
   const band = lv => { if (!lv) return "Level unbekannt"; const lo = Math.floor((lv - 1) / 5) * 5 + 1; return `Level ${lo}–${lo + 4}`; };
-  let rows = "", last = null;
+  let rows = "", last = null, gi = 0;
   for (const q of Q) {
     const b = band(q.level);
     if (b !== last) { rows += `<tr class="band" data-band="1"><th colspan="3">${b}</th></tr>`; last = b; }
-    const k = q.me && q.friend ? "both" : q.me ? "me" : "him";
-    rows += `<tr data-k="${k}" data-tog="${tog(q) ? 1 : 0}"><td><span class="qi"><span class="lv ${q.level ? lvcls(q.level) : "gry"}">${q.level || "·"}</span>`
-      + `<a href="https://www.wowhead.com/classic/quest=${q.id}" target="_blank" rel="noopener">${esc(q.name)}</a>${q.classOnly ? `<small class="cls">${CLS[q.classOnly] || esc(q.classOnly)}-Quest</small>` : ""}</span></td>`
-      + `<td class="c">${cell(q.me, q.meProgress, q)}</td><td class="c">${cell(q.friend, q.friendProgress, q)}</td></tr>`;
+    const k = q.me && q.friend ? "both" : q.me ? "me" : "him", chain = (q.parts || []).length > 1, g = ++gi;
+    const lvl = `<span class="lv ${q.level ? lvcls(q.level) : "gry"}">${q.level || "·"}</span>`;
+    const cls = q.classOnly ? `<small class="cls">${CLS[q.classOnly] || esc(q.classOnly)}-Quest</small>` : "";
+    if (chain) {
+      rows += `<tr data-k="${k}" data-tog="${tog(q) ? 1 : 0}" class="chain" data-g="${g}"><td><span class="qi">${lvl}<button type="button" class="tg" aria-expanded="false" aria-label="Kette aufklappen">›</button>`
+        + `<span>${esc(q.name)} <small class="cls">Kette · ${q.parts.length} Teile</small>${cls}</span></span></td>`
+        + `<td class="c">${chainCell(q, "me")}</td><td class="c">${chainCell(q, "friend")}</td></tr>`;
+      q.parts.forEach((p, n) => {
+        rows += `<tr class="part" data-p="${g}" hidden><td><span class="qi"><span class="lv gry">${n + 1}.</span>`
+          + `<a href="https://www.wowhead.com/classic/quest=${p.id}" target="_blank" rel="noopener">${esc(p.name)}</a>${p.cls ? `<small class="cls">${CLS[p.cls] || esc(p.cls)}</small>` : ""}</span></td>`
+          + `<td class="c">${cell(p.me, p.meProgress, p.cls ? { classOnly: p.cls } : null)}</td><td class="c">${cell(p.friend, p.friendProgress, p.cls ? { classOnly: p.cls } : null)}</td></tr>`;
+      });
+    } else {
+      rows += `<tr data-k="${k}" data-tog="${tog(q) ? 1 : 0}"><td><span class="qi">${lvl}`
+        + `<a href="https://www.wowhead.com/classic/quest=${q.id}" target="_blank" rel="noopener">${esc(q.name)}</a>${cls}</span></td>`
+        + `<td class="c">${cell(q.me, q.meProgress, q)}</td><td class="c">${cell(q.friend, q.friendProgress, q)}</td></tr>`;
+    }
   }
   const r = D.route || {};
   const routeText = String(r.text || "").replace(/<(?!\/?(q|b)>)[^>]*>/g, "");
@@ -146,10 +176,16 @@ tr.band th { text-align: left; font-size: 12px; font-weight: 600; color: var(--i
         </div></div>
       <div class="tw"><table><thead><tr><th>Quest</th><th class="c">${M} (L${L})</th><th class="c">${F}${fr ? ` (L${fr.level})` : ""}</th></tr></thead>
         <tbody>${rows || '<tr><td colspan="3" class="empty">Noch keine Questdaten.</td></tr>'}</tbody></table></div>
-      <div class="legend"><span><span class="st done">✓</span> abgegeben</span><span><span class="st open">●</span> im Questlog, mit Fortschritt</span><span><span class="st none">–</span> fehlt</span><span>Zahl vorne = Quest-Level</span><span>Klassenquests zählen nicht als fehlend</span></div>
+      <div class="legend"><span><span class="st done">✓</span> abgegeben</span><span><span class="st open">●</span> im Questlog, mit Fortschritt</span><span><span class="st none">–</span> fehlt</span><span>Zahl vorne = Quest-Level</span><span>Klassenquests zählen nicht als fehlend</span><span>Kreis = Teile einer Questkette, Zeile anklicken zum Aufklappen</span></div>
     </div>`;
 
-  const trs = [...app.querySelectorAll("tbody tr")];
+  const trs = [...app.querySelectorAll("tbody tr")].filter(tr => !tr.classList.contains("part"));
+  app.querySelector("tbody").addEventListener("click", e => {
+    const row = e.target.closest("tr.chain"); if (!row || e.target.closest("a")) return;
+    const btn = row.querySelector(".tg"), open = btn.getAttribute("aria-expanded") !== "true";
+    btn.setAttribute("aria-expanded", open);
+    app.querySelectorAll(`tr.part[data-p="${row.dataset.g}"]`).forEach(tr => tr.hidden = !open || row.hidden);
+  });
   app.querySelector(".seg").addEventListener("click", e => {
     const b = e.target.closest("button"); if (!b) return;
     const f = b.dataset.f, bands = [];
@@ -159,6 +195,10 @@ tr.band th { text-align: left; font-size: 12px; font-weight: 600; color: var(--i
       tr.hidden = !ok; if (ok && bands.length) bands[bands.length - 1][1]++;
     });
     bands.forEach(([tr, n]) => tr.hidden = n === 0);
+    app.querySelectorAll("tr.chain").forEach(row => {
+      const open = row.querySelector(".tg").getAttribute("aria-expanded") === "true";
+      app.querySelectorAll(`tr.part[data-p="${row.dataset.g}"]`).forEach(tr => tr.hidden = !open || row.hidden);
+    });
     app.querySelectorAll(".seg button").forEach(x => x.setAttribute("aria-pressed", x === b));
   });
 })();
